@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1>Login</h1>
+    <h3>Sign in with google and use!</h3>
     <button @click="login">Login with google</button>
   </div>
 </template>
@@ -10,29 +11,62 @@
 
   export default {
     methods:{
-      login(){
-        var provider = new firebase.auth.GoogleAuthProvider();
-        provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+        login(){
+          var provider = new firebase.auth.GoogleAuthProvider();
+          provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 
-          firebase.auth().signInWithPopup(provider).then(result => {
-            // This gives you a Google Access Token. You can use it to access the Google API.
-            var token = result.credential.accessToken;
-            // The signed-in user info.
-            var user = result.user;
+          firebase.auth().signInWithPopup(provider).then(async result => {
+                let user = result.user
+                if (user) {
+                    const result = await db
+                        .collection('users')
+                        .where('id', '==', user.uid)
+                        .get()
 
-            this.$router.push('/');
-          }).catch(function(error) {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            // The email of the user's account used.
-            var email = error.email;
-            // The firebase.auth.AuthCredential type that was used.
-            var credential = error.credential;
-            // ...
-          });
-
-      }
+                    if (result.docs.length === 0) {
+                        // Set new data since this is a new user
+                        db
+                          .collection('users')
+                          .doc(user.uid)
+                          .set({
+                              id: user.uid,
+                              nickname: user.displayName,
+                              photoUrl: user.photoURL
+                            })
+                            .then(
+                              this.$router.push('/')
+                            )
+                    } else {
+                        this.$router.push('/')
+                    }
+                } else {
+                    console.log('error')
+                }
+          })
+          .catch(err => {
+                  console.log(err)
+          })
+    
+      },
+      // checkUser(){
+      //   var test = db.collection('users')
+      //     .where('id', '==' ,user.uid)
+      //     .get()
+      //       if(test){
+      //         console.log('logged');
+      //       }else{
+      //         console.log('no logged');
+      //         newUser(user);
+      //       }
+      // },
+      // newUser(user){
+      //   db.collection('users')
+      //     .add({
+      //       id: user.uid,
+      //       name: user.displayName,
+      //       avatar: user.photoURL
+      //     });
+      // }
     }
   }
 </script>
