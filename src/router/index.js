@@ -1,23 +1,23 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Chat from '@/components/Chat'
-import Login from '@/components/Login'
+import Vue from "vue";
+import Router from "vue-router";
+import Chat from "@/components/Chat";
+import Login from "@/components/Login";
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/',
-      name: 'Chat',
+      path: "/",
+      name: "Chat",
       component: Chat
     },
     {
-      path: '/login',
-      name: 'Login',
+      path: "/login",
+      name: "Login",
       component: Login
     }
   ]
-})
+});

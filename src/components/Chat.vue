@@ -47,146 +47,23 @@
         <div class="col-lg-9 px-0 chat-div">
           <div class="px-4 py-5 chat-box bg-white">
             <!-- Sender Message-->
-            <div class="media w-50 mb-3"><img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">
-              <div class="media-body ml-3">
-                <div class="bg-light rounded py-2 px-3 mb-2">
-                  <p class="text-small mb-0 text-muted">Test which is a new approach all solutions</p>
+            <div :key="item.key" v-for="item in messages" class="media w-50 mb-3 active" :class="[item.username===authUser.displayName?'ml-auto':'']">
+               <div class="media-body ml-3">
+                <div class="rounded py-2 px-3 mb-2" :class="[item.username===authUser.displayName?'bg-primary':'bg-light']">
+                  <p class="text-small mb-0" :class="[item.username===authUser.displayName?'text-white':'text-muted']">{{item.message}}</p>
                 </div>
-                <p class="small text-muted">12:00 PM | Aug 13</p>
+                <p class="small text-muted">{{item.username}}</p>
               </div>
             </div>
-
-            <!-- Reciever Message-->
-            <div class="media w-50 ml-auto mb-3">
-              <div class="media-body">
-                <div class="bg-primary rounded py-2 px-3 mb-2">
-                  <p class="text-small mb-0 text-white">Test which is a new approach to have all solutions</p>
-                </div>
-                <p class="small text-muted">12:00 PM | Aug 13</p>
-              </div>
-            </div>
-            <div class="media w-50 mb-3"><img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">
-              <div class="media-body ml-3">
-                <div class="bg-light rounded py-2 px-3 mb-2">
-                  <p class="text-small mb-0 text-muted">Test which is a new approach all solutions</p>
-                </div>
-                <p class="small text-muted">12:00 PM | Aug 13</p>
-              </div>
-            </div>
-
-            <!-- Reciever Message-->
-            <div class="media w-50 ml-auto mb-3">
-              <div class="media-body">
-                <div class="bg-primary rounded py-2 px-3 mb-2">
-                  <p class="text-small mb-0 text-white">Test which is a new approach to have all solutions</p>
-                </div>
-                <p class="small text-muted">12:00 PM | Aug 13</p>
-              </div>
-            </div><div class="media w-50 mb-3"><img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">
-              <div class="media-body ml-3">
-                <div class="bg-light rounded py-2 px-3 mb-2">
-                  <p class="text-small mb-0 text-muted">Test which is a new approach all solutions</p>
-                </div>
-                <p class="small text-muted">12:00 PM | Aug 13</p>
-              </div>
-            </div>
-
-            <!-- Reciever Message-->
-            <div class="media w-50 ml-auto mb-3">
-              <div class="media-body">
-                <div class="bg-primary rounded py-2 px-3 mb-2">
-                  <p class="text-small mb-0 text-white">Test which is a new approach to have all solutions</p>
-                </div>
-                <p class="small text-muted">12:00 PM | Aug 13</p>
-              </div>
-            </div><div class="media w-50 mb-3"><img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">
-              <div class="media-body ml-3">
-                <div class="bg-light rounded py-2 px-3 mb-2">
-                  <p class="text-small mb-0 text-muted">Test which is a new approach all solutions</p>
-                </div>
-                <p class="small text-muted">12:00 PM | Aug 13</p>
-              </div>
-            </div>
-
-            <!-- Reciever Message-->
-            <div class="media w-50 ml-auto mb-3">
-              <div class="media-body">
-                <div class="bg-primary rounded py-2 px-3 mb-2">
-                  <p class="text-small mb-0 text-white">Test which is a new approach to have all solutions</p>
-                </div>
-                <p class="small text-muted">12:00 PM | Aug 13</p>
-              </div>
-            </div><div class="media w-50 mb-3"><img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">
-              <div class="media-body ml-3">
-                <div class="bg-light rounded py-2 px-3 mb-2">
-                  <p class="text-small mb-0 text-muted">Test which is a new approach all solutions</p>
-                </div>
-                <p class="small text-muted">12:00 PM | Aug 13</p>
-              </div>
-            </div>
-
-            <!-- Reciever Message-->
-            <div class="media w-50 ml-auto mb-3">
-              <div class="media-body">
-                <div class="bg-primary rounded py-2 px-3 mb-2">
-                  <p class="text-small mb-0 text-white">Test which is a new approach to have all solutions</p>
-                </div>
-                <p class="small text-muted">12:00 PM | Aug 13</p>
-              </div>
-            </div>
-
-            <!-- Sender Message-->
-            <div class="media w-50 mb-3"><img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">
-              <div class="media-body ml-3">
-                <div class="bg-light rounded py-2 px-3 mb-2">
-                  <p class="text-small mb-0 text-muted">Test, which is a new approach to have</p>
-                </div>
-                <p class="small text-muted">12:00 PM | Aug 13</p>
-              </div>
-            </div>
-
-            <!-- Reciever Message-->
-            <div class="media w-50 ml-auto mb-3">
-              <div class="media-body">
-                <div class="bg-primary rounded py-2 px-3 mb-2">
-                  <p class="text-small mb-0 text-white">Apollo University, Delhi, India Test</p>
-                </div>
-                <p class="small text-muted">12:00 PM | Aug 13</p>
-              </div>
-            </div>
-
-            <!-- Sender Message-->
-            <div class="media w-50 mb-3"><img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">
-              <div class="media-body ml-3">
-                <div class="bg-light rounded py-2 px-3 mb-2">
-                  <p class="text-small mb-0 text-muted">Test, which is a new approach</p>
-                </div>
-                <p class="small text-muted">12:00 PM | Aug 13</p>
-              </div>
-            </div>
-
-            <!-- Reciever Message-->
-            <div class="media w-50 ml-auto mb-3">
-              <div class="media-body">
-                <div class="bg-primary rounded py-2 px-3 mb-2">
-                  <p class="text-small mb-0 text-white">Apollo University, Delhi, India Test</p>
-                </div>
-                <p class="small text-muted">12:00 PM | Aug 13</p>
-              </div>
-            </div>
-
           </div>
-
           <!-- Typing area -->
-          <form action="#" class="bg-light">
             <div class="input-group">
-              <input type="text" placeholder="Type a message" aria-describedby="button-addon2" class="form-control rounded-0 border-0 py-4 bg-light">
+              <input type="text" v-model="message" @keyup.enter="saveMessage"  placeholder="Type a message" aria-describedby="button-addon2" class="form-control rounded-0 border-0 py-4 bg-light">
               <div class="input-group-append">
                 <button id="button-addon3" class="btn btn-link"> <font-awesome-icon icon="image" /></button>
-                <button id="button-addon2" type="submit" class="btn btn-link"> <font-awesome-icon icon="paper-plane" /></button>
+                <button id="button-addon2" type="submit" class="btn btn-link"> <font-awesome-icon icon="paper-plane" v-on:click="saveMessage()" /></button>
               </div>
             </div>
-          </form>
 
         </div>
       </div>
@@ -210,15 +87,6 @@ export default {
     };
   },
   mounted() {
-    
-    const dbRef = firebase.database().ref('chat');
-      dbRef.on('value', message => {
-        this.messages = message.val();
-        setTimeout(()=>{
-          this.scrollToBottom();
-        }, 100);
-      })
-      var result='';
       let resultUsers = db
         .collection('users')
         .get()
@@ -251,31 +119,36 @@ export default {
       });
     },
     scrollToBottom(){
-      let box = document.querySelector('.msgBox');
+      let box = document.querySelector('.chat-box');
       box.scrollTop=box.scrollHeight;
     },
 
     saveMessage(){
-      const dbRef = firebase.database().ref('chat');
-      dbRef.push({
-        message:this.message,
-        username:this.authUser.displayName
-        //date: new Date()
-      }).then(()=>{
-        this.scrollToBottom();
-      })
-      
-      this.message=null;
+        db
+          .collection('chat')
+          .add({
+            message:this.message,
+            username:this.authUser.displayName,
+            createdAt: new Date()
+        })
+        .then(()=>{
+          this.scrollToBottom();
+        })
+         this.message=null;
     },
 
     fetchMessages(){
-      const dbRef = firebase.database().ref('chat');
-      dbRef.on('value', message => {
-        this.messages = message.val();
-      });
-      setTimeout(()=>{
-          this.scrollToBottom();
-        }, 1000);
+      db
+        .collection('chat')
+        .orderBy('createdAt')
+        .onSnapshot((querySnapshot)=>{
+          let allMessages=[];
+          querySnapshot.forEach(doc=>{
+            allMessages.push(doc.data())
+          })
+          this.messages=allMessages;
+          setTimeout(()=>{ this.scrollToBottom(); }, 10);
+        })
     },
 
   },
