@@ -11,7 +11,7 @@
 
             <div class="bg-gray px-4 py-2 bg-light d-flex">
               <a v-on:click="logout();" class="mr-3"><font-awesome-icon icon="sign-out-alt" style="font-size:30px;" /></a>
-              <p class="h5 mb-0 py-1">Recent</p>
+              <p class="h5 mb-0 py-1">Recent {{ authUser.displayName}}</p>
               <a v-on:click="closeMenu();" class="mobile-close"><font-awesome-icon icon="times" style="font-size:30px;" /></a>
             </div>
 
@@ -27,10 +27,9 @@
                     </div>
                   </div>
                 </a>
-
-                   <!-- setPeerUser(user.id);getGroupChatId(); -->
-               <div :key="user.id" v-for="user in users" class="list-group-item list-group-item-action list-group-item-light rounded-0" :class="[user.id===authUser.uid?'d-none':'']">
-                    <router-link v-bind:to="'/group/'+user.id">
+                    <!-- setPeerUser(user.id);getGroupChatId(); -->
+                <div :key="user.id" v-for="user in users" class="list-group-item list-group-item-action list-group-item-light rounded-0" :class="[user.id===authUser.uid?'d-none':'']">
+                    <a v-on:click="changePeer(user.id)">
                         <div class="media"><img v-bind:src="user.photoUrl" alt="user" width="50" class="rounded-circle">
                             <div class="media-body ml-4">
                             <div class="d-flex align-items-center justify-content-between mb-1">
@@ -38,7 +37,7 @@
                             </div>
                             </div>
                         </div>
-                    </router-link>
+                    </a>
                 </div>
 
 
@@ -50,12 +49,12 @@
         <div class="col-lg-9 px-0 chat-div">
           <div class="px-4 py-5 chat-box bg-white">
             <!-- Sender Message-->
-            <div :key="item.key" v-for="item in messages" class="media w-50 mb-3 active" :class="[item.username===authUser.displayName?'ml-auto':'']">
+            <div :key="item.key" v-for="item in messages" class="media w-50 mb-3 active" :class="[item.idFrom===authUser.uid?'ml-auto':'']">
                <div class="media-body ml-3">
-                <div class="rounded py-2 px-3 mb-2" :class="[item.username===authUser.displayName?'bg-primary':'bg-light']">
-                  <p class="text-small mb-0" :class="[item.username===authUser.displayName?'text-white':'text-muted']">{{item.message}}</p>
+                <div class="rounded py-2 px-3 mb-2" :class="[item.idFrom===authUser.uid?'bg-primary':'bg-light']">
+                  <p class="text-small mb-0" :class="[item.idFrom===authUser.uid?'text-white':'text-muted']">{{item.message}}</p>
                 </div>
-                <p class="small text-muted">{{item.username}}</p>
+                <p class="small text-muted">{{item.nickname}}</p>
               </div>
             </div>
           </div>
@@ -75,7 +74,7 @@
 </template>
 
 <script>
-import firebase from 'firebase'
+import firebase, { auth } from 'firebase'
 
 export default {
   name: 'Chat',
@@ -87,7 +86,31 @@ export default {
       users: [],
       message:null,
       authUser:{},
+      peerUser:this.$route.params.id,
+      groupChatId:{},
+      listener:null
     };
+  },
+  watch: {
+  '$route' () {
+        this.listener = null;
+        console.log('destroy');
+        this.groupChatId=null;
+        this.peerUser = this.$route.params.id,
+        this.getGroupChatId();
+    }
+  },
+  created(){
+    firebase.auth().onAuthStateChanged(user=>{
+      if(user){
+          console.log('works');
+          this.authUser=user;
+      }else{
+        this.authUser={}
+      }
+    })
+
+    //this.fetchMessages();
   },
   mounted() {
       let resultUsers = db
@@ -106,6 +129,40 @@ export default {
   },
   
   methods:{
+      componentWillUnmount() {
+        if (this.listener) {
+            this.listener()
+        }
+    },
+      changePeer(id){
+          this.componentWillUnmount();
+          this.peerUser=id;
+          this.getGroupChatId();
+      },
+      getGroupChatId(){
+        if (this.listener) {
+            this.listener = null;
+        }
+        this.messages=[];
+        if ( this.hashString(this.authUser.uid) <= this.hashString(this.peerUser)) {
+            this.groupChatId = `${this.authUser.uid}-${this.peerUser}`
+        } else {
+            this.groupChatId = `${this.peerUser}-${this.authUser.uid}`
+        }
+        console.log(this.groupChatId);
+        this.fetchMessages()
+      },
+      setPeerUser(id){
+          this.peerUser = id;
+      },
+   hashString(str){
+        let hash = 0
+        for (let i = 0; i < str.length; i++) {
+            hash += Math.pow(str.charCodeAt(i) * 31, str.length - i)
+            hash = hash & hash // Convert to 32bit integer
+        }
+        return hash
+    },
       openMenu(){
         document.getElementById('messages-div').classList.add("active");
         console.log('open');
@@ -125,24 +182,38 @@ export default {
       let box = document.querySelector('.chat-box');
       box.scrollTop=box.scrollHeight;
     },
+    getNow: function() {
+                    const today = new Date();
+                    const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+                    const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                    const dateTime = date +' '+ time;
+                    this.timestamp = dateTime;
+                    return dateTime;
+                },
 
     saveMessage(){
         db
-          .collection('chat')
-          .add({
+          .collection('msg')
+          .doc(this.groupChatId)
+          .collection(this.groupChatId)
+          .doc(this.getNow())
+          .set({
             message:this.message,
-            username:this.authUser.displayName,
+            idFrom: this.authUser.uid,
+            idTo: this.peerUser,
             createdAt: new Date()
+        }).then(() => {
+            this.message=null;
         })
-        .then(()=>{
-          this.scrollToBottom();
-        })
-         this.message=null;
+            setTimeout(()=>{ this.scrollToBottom(); }, 70);
+           
     },
 
     fetchMessages(){
-      db
-        .collection('chat')
+       this.listener = db
+        .collection('msg')
+        .doc(this.groupChatId)
+        .collection(this.groupChatId)
         .orderBy('createdAt')
         .onSnapshot((querySnapshot)=>{
           let allMessages=[];
@@ -152,23 +223,9 @@ export default {
           this.messages=allMessages;
           setTimeout(()=>{ this.scrollToBottom(); }, 10);
         })
+            
     },
 
-  },
-  beforeDestroy(){
-    console.log('destroy')
-    this.fetchMessages = null;
-  },
-  created(){
-    firebase.auth().onAuthStateChanged(user=>{
-      if(user){
-        this.authUser=user;
-      }else{
-        this.authUser={}
-      }
-    })
-
-    this.fetchMessages();
   },
 
   beforeRouteEnter(to,from,next){

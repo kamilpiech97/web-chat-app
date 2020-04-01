@@ -30,4 +30,87 @@ button:hover {
   background-color: white;
   color: black;
 }
+
+ html{
+      overflow-y: hidden;
+    }
+  body {
+    background-color: #74EBD5;
+    background-image: linear-gradient(90deg, #74EBD5 0%, #9FACE6 100%);
+    font-family: 'Montserrat', sans-serif!important;
+    min-height: 100vh;
+  }
+
+  .mobile-close{
+    display: none;
+  }
+
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    width: 5px;
+    background: #f5f5f5;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    width: 1em;
+    background-color: #ddd;
+    outline: 1px solid slategrey;
+    border-radius: 1rem;
+  }
+
+  .text-small {
+    font-size: 0.9rem;
+  }
+
+  .messages-box,
+  .chat-box {
+    height: 95vh;
+    overflow-y: scroll;
+  }
+
+  .rounded-lg {
+    border-radius: 0.5rem;
+  }
+
+  input::placeholder {
+    font-size: 0.9rem;
+    color: #999;
+  }
+  .button-div{
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 1rem;
+    z-index: 1001;
+  }
+  a{
+    cursor: pointer;
+  }
+
+  @media (max-width: 991px){
+    .mobile-close{
+      display: block;
+    }
+    .messages-div{
+      display: none;
+      z-index: 1002;
+    }
+    .messages-div.active{
+      max-width: 100%!important;
+      width: 100%!important;
+      flex: 100%!important;
+      display: block;
+    }
+    .chat-div {
+      max-width: 100%!important;
+    }
+    .button-div{
+      display: block;
+    }
+  }
 </style>
+

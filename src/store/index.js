@@ -1,19 +1,55 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import Vue from 'vue'
+import Vuex from 'vuex'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    name: ""
+    user: null,
+    currentPeerUser: null,
+    chatId:null,
+    loading:false
+  },
+  getters: {
+    getUser: state => state.user,
+    getPeerUser: state => state.currentPeerUser,
+    getChatId: state => state.chatId,
+    getLoading: state => state.loading,
   },
   mutations: {
-    setName(name) {
-      state.name = name;
+    storeUser(state, data) {
+      state.user = data
+    },
+    storePeerUser(state, data) {
+      state.currentPeerUser = data
+    },
+    storeChatId(state, data) {
+      state.chatId = data
+    },
+    changeLoadingStatus(state, data) {
+      state.loading = data
     }
   },
   actions: {
-    name: state => state.name
-  },
-  modules: {}
-});
+    setSession({
+      commit
+    }, data) {
+      commit('storeUser', data)
+    },
+    setPeerUser({
+      commit
+    }, data) {
+      commit('storePeerUser', data)
+    },
+    setChatId({
+      commit
+    }, data) {
+      commit('storeChatId', data)
+    },
+    setLoading({
+      commit
+    }, data) {
+      commit('changeLoadingStatus', data)
+    },
+  }
+})
