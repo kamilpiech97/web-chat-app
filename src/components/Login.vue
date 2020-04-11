@@ -35,9 +35,11 @@ export default {
                   nickname: user.displayName,
                   photoUrl: user.photoURL
                 })
-                .then(this.$router.push("/"));
+                .then(
+                  this.$router.push("/home")
+                  );
             } else {
-              this.$router.push("/");
+              this.$router.push("/home");
             }
           } else {
             console.log("error");
@@ -46,26 +48,26 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    checkUser(){
+      var result = db.collection('users')
+        .where('id', '==' ,user.uid)
+        .get()
+          if(result){
+            console.log('logged');
+          }else{
+            console.log('no logged');
+            newUser(user);
+          }
+    },
+    newUser(user){
+      db.collection('users')
+        .add({
+          id: user.uid,
+          name: user.displayName,
+          avatar: user.photoURL
+        });
     }
-    // checkUser(){
-    //   var test = db.collection('users')
-    //     .where('id', '==' ,user.uid)
-    //     .get()
-    //       if(test){
-    //         console.log('logged');
-    //       }else{
-    //         console.log('no logged');
-    //         newUser(user);
-    //       }
-    // },
-    // newUser(user){
-    //   db.collection('users')
-    //     .add({
-    //       id: user.uid,
-    //       name: user.displayName,
-    //       avatar: user.photoURL
-    //     });
-    // }
   }
 };
 </script>
