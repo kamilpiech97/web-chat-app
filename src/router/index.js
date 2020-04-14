@@ -15,8 +15,8 @@ export default new Router({
   routes: [
     {
       path: "/",
-      name: "Chat",
-      component: Chat
+      name: "Board",
+      component: Board
     },
     {
       path: "/group/:id",
@@ -32,12 +32,6 @@ export default new Router({
       path: "/login",
       name: "Login",
       component: Login
-    },
-
-    {
-      path: "/home",
-      name: "Board",
-      component: Board
     }
   ]
 });

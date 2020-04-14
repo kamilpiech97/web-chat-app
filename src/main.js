@@ -58,6 +58,7 @@ firebase.initializeApp(config);
 var db = firebase.firestore();
 window.db = db;
 
+
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */

@@ -33,13 +33,19 @@ export default {
                 .set({
                   id: user.uid,
                   nickname: user.displayName,
-                  photoUrl: user.photoURL
+                  photoUrl: user.photoURL,
+                  status: "online"
                 })
                 .then(
-                  this.$router.push("/home")
+                  this.$router.push("/")
                   );
             } else {
-              this.$router.push("/home");
+              db.collection("users")
+                .doc(user.uid)
+                .update({
+                  status: "online"
+                })
+              this.$router.push("/");
             }
           } else {
             console.log("error");

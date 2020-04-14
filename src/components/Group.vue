@@ -171,13 +171,6 @@ export default {
         document.getElementById('messages-div').classList.remove("active");
         console.log('close');
       },
-    logout(){
-      firebase.auth().signOut().then(function() {
-        this.$router.push('/login')
-      }, function(error) {
-        console.log(error)
-      });
-    },
     scrollToBottom(){
       let box = document.querySelector('.chat-box');
       box.scrollTop=box.scrollHeight;

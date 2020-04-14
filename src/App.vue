@@ -91,6 +91,12 @@ a {
   cursor: pointer;
 }
 
+.list-group-item-light.list-group-item-action.active {
+    color: #fff;
+    background-color: black!important;
+    border-color: black!important;
+}
+
 @media (max-width: 991px) {
   .mobile-close {
     display: block;

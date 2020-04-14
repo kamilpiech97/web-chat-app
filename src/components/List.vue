@@ -16,38 +16,22 @@
 
         <div class="messages-box">
           <div class="list-group rounded-0">
-            <a class="list-group-item list-group-item-action active text-white rounded-0">
-              <div class="media">
-                <img
-                  src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg"
-                  alt="user"
-                  width="50"
-                  class="rounded-circle"
-                />
-                <div class="media-body ml-4">
-                  <div class="d-flex align-items-center justify-content-between mb-1">
-                    <h6 class="mb-0">Jason Doe</h6>
-                    <small class="small font-weight-bold">25 Dec</small>
-                  </div>
-                </div>
-              </div>
-            </a>
-            <div 
+            <a 
             v-on:click="changePeer(user.id, user.nickname);openMenu();"
               :key="user.id"
               v-for="user in users"
               class="list-group-item list-group-item-action list-group-item-light rounded-0"
-              :class="[user.id ===  $store.state.user.id ?'d-none':'']"
+              :class="[user.id ===  $store.state.user.id ?'d-none':'', user.id ===  $store.state.currentPeerUser ? 'active text-white':'']"
             >
                 <div class="media">
                   <img v-bind:src="user.photoUrl" alt="user" width="50" class="rounded-circle" />
                   <div class="media-body ml-4">
                     <div class="d-flex align-items-center justify-content-between mb-1">
-                      <h6 class="mb-0">{{user.nickname}}</h6>
+                      <h6 class="mb-0" :class="[user.status === 'online' ? 'text-success': 'text-danger']">{{user.nickname}}</h6>
                     </div>
                   </div>
                 </div>
-            </div>
+            </a>
           </div>
         </div>
       </div>
@@ -77,7 +61,15 @@ export default {
       store.dispatch("setPeerUserNickname", nickname);
       console.log(this.$store.state.currentPeerUserNickname);
     },
+    updateStatus(){
+      db.collection("users")
+        .doc(this.$store.state.user.id)
+        .update({
+          status: "offline"
+      })
+    },
     logout() {
+      this.updateStatus();
       firebase
         .auth()
         .signOut()
@@ -95,8 +87,7 @@ export default {
   beforeCreate() {
     let resultUsers = db
       .collection("users")
-      .get()
-      .then(querySnapshot => {
+      .onSnapshot(querySnapshot => {
         let allUsers = [];
         querySnapshot.forEach(doc => {
           allUsers.push(doc.data());
@@ -105,6 +96,9 @@ export default {
         this.users = allUsers;
       });
 
-  }
+  },
+  //  created(){
+  //     window.addEventListener('beforeunload', this.updateStatus());
+  //  }
 };
 </script>
