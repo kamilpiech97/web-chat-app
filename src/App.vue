@@ -35,8 +35,7 @@ html {
   overflow-y: hidden;
 }
 body {
-  background-color: #74ebd5;
-  background-image: linear-gradient(90deg, #74ebd5 0%, #9face6 100%);
+  background-color: white!important;
   font-family: "Montserrat", sans-serif !important;
   min-height: 100vh;
 }

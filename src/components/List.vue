@@ -1,15 +1,25 @@
 <template>
   <!-- Users box-->
     <div class="col-lg-3 px-0">
+      <modal
+        v-show="isModalVisible"
+        @close="closeModal"
+      />
       <div class="button-div">
         <a v-on:click="openMenu();">
           <font-awesome-icon icon="bars" style="font-size:30px;" />
+        </a>
+        <a v-on:click="showModal();">
+          Edycja
         </a>
       </div>
       <div class="bg-white messages-div" id="messages-div">
         <div class="bg-gray px-4 py-2 bg-light d-flex">
           <a v-on:click="logout();" class="mr-3">
             <font-awesome-icon icon="sign-out-alt" style="font-size:30px;" />
+          </a>
+          <a v-on:click="showModal();" class="mr-3">
+            <font-awesome-icon icon="cog" style="font-size:30px;" />
           </a>
           <p class="h5 mb-0 py-1">{{ $store.state.user.nickname }}</p>
         </div>
@@ -42,16 +52,27 @@
 import firebase, { auth } from "firebase";
 import { mapGetters } from "vuex";
 import store from "../store";
+import Modal from '@/components/Profile.vue';
 
 export default {
   name: "SingleChat",
   data() {
     return {
       users: {},
+      isModalVisible: false,
       user: ''
     };
   },
+  components: {
+    Modal
+  },
   methods: {
+    showModal() {
+      this.isModalVisible = true;
+    },
+    closeModal() {
+      this.isModalVisible = false;
+    },
     openMenu() {
       document.getElementById("messages-div").classList.toggle("active");
       console.log("open");

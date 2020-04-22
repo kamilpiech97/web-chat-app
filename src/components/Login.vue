@@ -1,8 +1,13 @@
 <template>
   <div>
-    <h1>Login</h1>
-    <h3>Sign in with google and use!</h3>
-    <button @click="login">Login with google</button>
+    <div class="d-flex align-items-center login-box">
+      <div class="m-auto">
+        <h2>Zaloguj się za pomocą Google i korzystaj!</h2>
+        <img src="../assets/googlelogo.png" alt="" class="mt-2 mb-2"><br>
+        <button @click="login" class="btn-lg">Logowanie</button>
+      </div>
+    </div>
+    
   </div>
 </template>
 
@@ -79,4 +84,8 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped></style>
+<style scoped>
+.login-box{
+  height: 100vh;
+}
+</style>

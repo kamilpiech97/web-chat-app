@@ -13,7 +13,9 @@ import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { faCog } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
 
 /* Import the firebase SDK and extend with firestore */
 import firebase from "firebase";
@@ -21,6 +23,7 @@ import firebase from "firebase";
 require("firebase/firestore");
 
 library.add(faPaperPlane);
+library.add(faCog);
 library.add(faImage);
 library.add(faSignOutAlt);
 library.add(faTimes);
