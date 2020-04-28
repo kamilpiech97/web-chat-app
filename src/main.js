@@ -15,6 +15,7 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { faCog } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import VueOnlineProp from "vue-online-prop"
 
 
 /* Import the firebase SDK and extend with firestore */
@@ -62,8 +63,9 @@ var db = firebase.firestore();
 window.db = db;
 
 
-Vue.config.productionTip = false;
 
+Vue.config.productionTip = false;
+Vue.use(VueOnlineProp)
 /* eslint-disable no-new */
 // new Vue({
 //   el: '#app',

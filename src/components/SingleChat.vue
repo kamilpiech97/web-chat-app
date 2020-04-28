@@ -1,61 +1,58 @@
 <template>
   <!-- Chat Box-->
   <div class="col-lg-9 px-0 chat-div">
-    <div class="px-4 py-5 bg-white"  v-if="!messages.length">
-      <h1>Wybierz osobę z którą chcesz popisać ;)</h1>
-      <img src="../assets/w.png" alt="" class="mt-5 mb-2 img-fluid w-25"><br>
-    </div>
-
+      <!-- <Info v-if="this.$store.state.currentPeerUser"/> -->
     <div class="px-4 py-5 chat-box bg-white">
       <!-- Sender Message-->
       <div
         :key="item.key"
         v-for="item in messages"
         class="text-left media w-50 mb-3 active"
-        :class="[item.idFrom===$store.state.user.id?'ml-auto':'']"
+        :class="[item.userId === $store.state.user.id ? 'ml-auto':'']"
       >
           <!-- TEXT Message-->
           <div class="media-body ml-3" 
             v-if="item.type == 1">
             <div class="rounded py-2 px-3 mb-2"
-              :class="[item.idFrom===$store.state.user.id?'bg-primary':'bg-dark']">
+              :class="[item.userId === $store.state.user.id?'bg-primary':'bg-dark']">
               <p
                 class="text-small mb-0"
-                :class="[item.idFrom===$store.state.user.id?'text-white':'text-white']"
+                :class="[item.userId === $store.state.user.id?'text-white':'text-white']"
               >{{item.message}}</p>
             </div>
+            <small v-on:click="deleteMessage(item.createdAt)"  v-if="item.userId === $store.state.user.id && item.deleted == 0" class="delete-link">Usuń |</small>
             <small
-              v-if="item.idFrom === $store.state.currentPeerUser"
+              v-if="item.userId === $store.state.user.id"
               class="small text-left text-muted"
-            >{{$store.state.currentPeerUserNickname}}</small>
+            > {{item.nickname}}</small> 
             <small
-              v-if="item.idFrom === $store.state.user.id"
-              class="small text-left text-muted"
-            >{{$store.state.user.nickname}}</small>
+              class="small text-left text-muted" v-else>
+              {{item.nickname}}</small>
           </div>
           <!-- PHOTO Message--> 
           <div class="media-body ml-3" 
             v-if="item.type == 2">
             <div class="rounded py-2 px-3 mb-2"
-              :class="[item.idFrom===$store.state.user.id?'bg-primary':'bg-dark']">
+              :class="[item.userId === $store.state.user.id?'bg-primary':'bg-dark']">
               <img
                 :src="item.message"
                 class="img-fluid"
               >
             </div>
             <small
-              v-if="item.idFrom === $store.state.currentPeerUser"
+              v-if="item.userId != $store.state.currentPeerUser"
               class="small text-left text-muted"
-            >{{$store.state.currentPeerUserNickname}}</small>
+            >{{item.nickname}}</small>
+            <small v-on:click="deleteMessage(item.createdAt)" v-if="item.userId === $store.state.user.id && item.deleted == 0" class="delete-link">Usuń | </small>
             <small
-              v-if="item.idFrom === $store.state.user.id"
+              v-if="item.userId === $store.state.user.id"
               class="small text-left text-muted"
-            >{{$store.state.user.nickname}}</small>
+            >{{item.nickname}}</small>
           </div>
       </div>
     </div>
     <!-- Typing area -->
-    <div class="input-group typing-box" v-if="messages.length > 0">
+    <div class="input-group typing-box">
       <input
         type="text"
         v-model="message"
@@ -81,8 +78,7 @@
 import { mapGetters } from "vuex";
 import store from "../store";
 import firebase, { auth, firestorage }  from "firebase";
-
-
+import Info from "@/components/Info.vue";
 
 export default {
   name: "SingleChat",
@@ -94,6 +90,9 @@ export default {
       messages: {},
       chatId: {}
     };
+  },
+  components: {
+    Info
   },
 
   methods: {
@@ -142,16 +141,18 @@ export default {
     },
 
     saveMessage(type) {
+      console.log(this.chatId);
       db.collection("msg")
         .doc(this.chatId)
         .collection(this.chatId)
         .doc(this.getNow())
         .set({
           message: this.message,
-          idFrom: this.$store.state.user.id,
-          idTo: this.$store.state.currentPeerUser,
+          userId: this.$store.state.user.id,
+          nickname: this.$store.state.user.nickname,
           type:type,
-          createdAt: new Date()
+          deleted: "0",
+          createdAt: this.getNow()
         })
         .then(() => {
           this.message = null;
@@ -176,28 +177,18 @@ export default {
                 })
         this.file = null;
     },
-
-    // savePhoto() {
-    //   db.collection("msg")
-    //     .doc(this.chatId)
-    //     .collection(this.chatId)
-    //     .doc(this.getNow())
-    //     .set({
-    //       message: this.photo,
-    //       idFrom: this.$store.state.user.id,
-    //       idTo: this.$store.state.currentPeerUser,
-    //       type:2,
-    //       createdAt: new Date()
-    //     })
-    //     .then(() => {
-    //       this.photo = null;
-    //       this.file = null;
-    //     });
-    //   setTimeout(() => {
-    //     this.scrollToBottom();
-    //   }, 1000);
-    // },
-
+    deleteMessage(id){
+      db.collection("msg")
+        .doc(this.chatId)
+        .collection(this.chatId)
+        .doc(id)
+        .update({
+          type: "1",
+          message: "Wiadomość usunięta",
+          deleted: "1"
+          
+      })
+    }
   },
   created() {
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
@@ -218,5 +209,9 @@ export default {
 .typing-box{
   border-top: 1px solid black;
   border-left: 1px solid black;
+}
+.delete-link{
+  color: red;
+  cursor: pointer;
 }
 </style>

@@ -15,8 +15,10 @@
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.7.0",
     "core-js": "^3.6.4",
-    "firebase": "^7.11.0",
+    "firebase": "^7.14.2",
+    "v-offline": "^1.2.1",
     "vue": "^2.6.11",
+    "vue-online-prop": "^1.0.1",
     "vue-router": "^3.1.5",
     "vue-silentbox": "^2.0.0",
     "vuelidate": "^0.7.5",
@@ -27,6 +29,7 @@
     "@vue/cli-plugin-router": "~4.2.0",
     "@vue/cli-plugin-vuex": "~4.2.0",
     "@vue/cli-service": "~4.2.0",
+    "vue-online": "^1.1.9",
     "vue-template-compiler": "^2.6.11"
   }
 }

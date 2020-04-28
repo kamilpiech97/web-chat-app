@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: "App"
+  name: "App",
 };
 </script>
 
@@ -66,7 +66,7 @@ body {
 
 .messages-box,
 .chat-box {
-  height: 95vh;
+  height: 93vh;
   overflow-y: scroll;
 }
 

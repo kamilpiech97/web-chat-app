@@ -2,14 +2,15 @@
   <div>
     <div class="container-fluid">
       <div class="row rounded-lg overflow-hidden shadow">
-    
+        <div v-if="!$online" class="offline-box">
+          <h1 class="bg-danger text-white">Brak internetu!</h1>
+        </div>
         <List />
-        <SingleChat />
+        <SingleChat/>
       </div>
     </div>
   </div>
 </template>
-<script src="/@deveodk/vue-toastr/dist/vue-toastr.js"></script>
 <script>
 // @ is an alias to /src
 import List from "@/components/List.vue";
@@ -23,6 +24,7 @@ export default {
   data() {
     return {
       authUser: {},
+      group:{},
       peerUser: {}
     };
   },
@@ -32,6 +34,9 @@ export default {
   },
 
   methods: {
+    handleConnectivityChange(status) {
+      console.log(status);
+    },
     user() {
       alert(this.$store.state.user.uid);
     },
@@ -45,13 +50,25 @@ export default {
       }
       return hash;
     },
+
+    initializeGroup(name){
+      this.clearMessages();
+      this.setGroup(name);
+    },
+
+    setGroup(name) {
+      store.dispatch("setChatId", name);
+    },
+
     initializePeerUser(){
       this.clearMessages();
-      this. getGroupChatId();
+      this.getGroupChatId();
     },
+
     clearMessages(){
       this.messages = [];
     },
+
     getGroupChatId() {
       console.log(this.peerUser);
       if (this.hashString(this.authUser.id) <= this.hashString(this.peerUser)) {
@@ -68,15 +85,25 @@ export default {
   },
 
   created() {
-    this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "storePeerUser") {
-        console.log(`Updating to ${state.currentPeerUser}`);
 
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type === "storeGroup") {
+        console.log(`Updating to ${state.chatId}`);
         this.authUser = this.$store.state.user;
-        this.peerUser = this.$store.state.currentPeerUser;
-        this.initializePeerUser();
+        this.initializeGroup(this.$store.state.chatId);
       }
+
+      if (mutation.type === "storePeerUser") {
+         console.log(`Updating to ${state.currentPeerUser}`);
+
+         this.authUser = this.$store.state.user;
+         this.peerUser = this.$store.state.currentPeerUser;
+         this.initializePeerUser();
+       }
+      
     });
+    
+    
   },
   beforeCreate(){
     firebase.auth().onAuthStateChanged(user => {
@@ -113,3 +140,14 @@ export default {
   }
 };
 </script>
+<style scoped>
+.offline-box{
+  height: 100vh;
+  width: 100vw;
+  z-index: 10001;
+  position: absolute;
+}
+.offline-box h1{
+  line-height: 6rem;
+}
+</style>

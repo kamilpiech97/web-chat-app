@@ -9,7 +9,7 @@ export default new Vuex.Store({
     currentPeerUser: null,
     currentPeerUserNickname: null,
     chatId: null,
-    loading: false
+    loading: false,
   },
   getters: {
     getUser: state => state.user,
@@ -29,6 +29,9 @@ export default new Vuex.Store({
       state.currentPeerUserNickname = data
     },
     storeChatId(state, data) {
+      state.chatId = data
+    },
+    storeGroup(state, data) {
       state.chatId = data
     },
     changeLoadingStatus(state, data) {
@@ -55,6 +58,11 @@ export default new Vuex.Store({
       commit
     }, data) {
       commit('storeChatId', data)
+    },
+    setGroup({
+      commit
+    }, data) {
+      commit('storeGroup', data)
     },
     setLoading({
       commit
