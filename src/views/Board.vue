@@ -6,7 +6,7 @@
           <h1 class="bg-danger text-white">Brak internetu!</h1>
         </div>
         <List />
-        <SingleChat/>
+        <SingleChat />
       </div>
     </div>
   </div>
@@ -16,15 +16,17 @@
 import List from "@/components/List.vue";
 import SingleChat from "@/components/SingleChat.vue";
 import firebase, { auth } from "firebase";
-import { mapGetters } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import store from "../store";
+import notifyMe from "../mixins/notifyMe";
 
 export default {
   name: "Board",
+  mixins:[notifyMe],
   data() {
     return {
       authUser: {},
-      group:{},
+      group: {},
       peerUser: {}
     };
   },
@@ -51,7 +53,7 @@ export default {
       return hash;
     },
 
-    initializeGroup(name){
+    initializeGroup(name) {
       this.clearMessages();
       this.setGroup(name);
     },
@@ -60,12 +62,12 @@ export default {
       store.dispatch("setChatId", name);
     },
 
-    initializePeerUser(){
+    initializePeerUser() {
       this.clearMessages();
       this.getGroupChatId();
     },
 
-    clearMessages(){
+    clearMessages() {
       this.messages = [];
     },
 
@@ -79,13 +81,35 @@ export default {
       store.dispatch("setChatId", this.groupChatId);
       console.log(this.groupChatId);
     },
-    getAuthUser(){
-      
-    },
+    checkNotifications(){
+        this.listenerNotify = db.collection("notifications")
+        .where('toUserId', '==', this.$store.state.user.id)
+        .onSnapshot(querySnapshot => {
+          let newNotification = [];
+          querySnapshot.forEach(doc => {
+            newNotification.push(doc.data());
+            store.dispatch("setNotification", newNotification[0]);
+          });
+
+      });
+    }
   },
-
+  beforeCreate() {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        console.log("works");
+        db.collection("users")
+          .doc(user.uid)
+          .get()
+          .then(function(doc) {
+            store.dispatch("setSession", doc.data());
+          });
+      } else {
+        this.authUser = {};
+      }
+    });
+  },
   created() {
-
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "storeGroup") {
         console.log(`Updating to ${state.chatId}`);
@@ -94,35 +118,20 @@ export default {
       }
 
       if (mutation.type === "storePeerUser") {
-         console.log(`Updating to ${state.currentPeerUser}`);
+        console.log(`Updating to ${state.currentPeerUser}`);
+        this.authUser = this.$store.state.user;
+        this.peerUser = this.$store.state.currentPeerUser;
+        this.initializePeerUser();
+      }
 
-         this.authUser = this.$store.state.user;
-         this.peerUser = this.$store.state.currentPeerUser;
-         this.initializePeerUser();
-       }
+      if (mutation.type === "storeNotification") {
+        //console.log(`Message from ${state.notification.fromUserName}`);
+        this.notifyMe(state.notification);
+      }
       
     });
-    
-    
+    this.checkNotifications();
   },
-  beforeCreate(){
-    firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-          console.log("works");
-          db
-          .collection("users")
-          .doc(user.uid)
-          .get()
-          .then(function(doc) {
-            store.dispatch("setSession", doc.data());
-
-          });
-        } else {
-          this.authUser = {};
-        }
-      });
-  },
-
   beforeDestroy() {
     this.unsubscribe();
   },
@@ -141,13 +150,13 @@ export default {
 };
 </script>
 <style scoped>
-.offline-box{
+.offline-box {
   height: 100vh;
   width: 100vw;
   z-index: 10001;
   position: absolute;
 }
-.offline-box h1{
+.offline-box h1 {
   line-height: 6rem;
 }
 </style>

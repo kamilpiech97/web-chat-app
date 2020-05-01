@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: "App",
+  name: "App"
 };
 </script>
 
@@ -35,7 +35,7 @@ html {
   overflow-y: hidden;
 }
 body {
-  background-color: white!important;
+  background-color: white !important;
   font-family: "Montserrat", sans-serif !important;
   min-height: 100vh;
 }
@@ -79,7 +79,7 @@ input::placeholder {
   color: #999;
 }
 .button-div {
-  display: none!important;
+  display: none !important;
   position: absolute;
   top: 0;
   right: 0;
@@ -91,9 +91,9 @@ a {
 }
 
 .list-group-item-light.list-group-item-action.active {
-    color: #fff;
-    background-color: black!important;
-    border-color: black!important;
+  color: #fff;
+  background-color: black !important;
+  border-color: black !important;
 }
 
 @media (max-width: 991px) {
@@ -116,7 +116,7 @@ a {
     max-width: 100% !important;
   }
   .button-div {
-    display: block!important;
+    display: block !important;
   }
 }
 </style>

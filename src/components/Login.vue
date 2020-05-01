@@ -3,11 +3,11 @@
     <div class="d-flex align-items-center login-box">
       <div class="m-auto">
         <h2>Zaloguj się za pomocą Google i korzystaj!</h2>
-        <img src="../assets/googlelogo.png" alt="" class="mt-2 mb-2"><br>
+        <img src="../assets/googlelogo.png" alt class="mt-2 mb-2" />
+        <br />
         <button @click="login" class="btn-lg">Logowanie</button>
       </div>
     </div>
-    
   </div>
 </template>
 
@@ -41,15 +41,13 @@ export default {
                   photoUrl: user.photoURL,
                   status: "online"
                 })
-                .then(
-                  this.$router.push("/")
-                  );
+                .then(this.$router.push("/"));
             } else {
               db.collection("users")
                 .doc(user.uid)
                 .update({
                   status: "online"
-                })
+                });
               this.$router.push("/");
             }
           } else {
@@ -60,24 +58,24 @@ export default {
           console.log(err);
         });
     },
-    checkUser(){
-      var result = db.collection('users')
-        .where('id', '==' ,user.uid)
-        .get()
-          if(result){
-            console.log('logged');
-          }else{
-            console.log('no logged');
-            newUser(user);
-          }
+    checkUser() {
+      var result = db
+        .collection("users")
+        .where("id", "==", user.uid)
+        .get();
+      if (result) {
+        console.log("logged");
+      } else {
+        console.log("no logged");
+        newUser(user);
+      }
     },
-    newUser(user){
-      db.collection('users')
-        .add({
-          id: user.uid,
-          name: user.displayName,
-          avatar: user.photoURL
-        });
+    newUser(user) {
+      db.collection("users").add({
+        id: user.uid,
+        name: user.displayName,
+        avatar: user.photoURL
+      });
     }
   }
 };
@@ -85,7 +83,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.login-box{
+.login-box {
   height: 100vh;
 }
 </style>

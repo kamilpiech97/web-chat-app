@@ -9,6 +9,7 @@ export default new Vuex.Store({
     currentPeerUser: null,
     currentPeerUserNickname: null,
     chatId: null,
+    notification: null,
     loading: false,
   },
   getters: {
@@ -33,6 +34,9 @@ export default new Vuex.Store({
     },
     storeGroup(state, data) {
       state.chatId = data
+    },
+    storeNotification(state, data) {
+      state.notification = data
     },
     changeLoadingStatus(state, data) {
       state.loading = data
@@ -63,6 +67,11 @@ export default new Vuex.Store({
       commit
     }, data) {
       commit('storeGroup', data)
+    },
+    setNotification({
+      commit
+    }, data) {
+      commit('storeNotification', data)
     },
     setLoading({
       commit
