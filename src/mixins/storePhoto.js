@@ -15,7 +15,7 @@ export default {
                             this.photo = downloadURL;
                         } else {
                             this.message = downloadURL;
-                            this.saveMessage(2);
+                            this.saveMessage(1);
                         }
                     })
                 })

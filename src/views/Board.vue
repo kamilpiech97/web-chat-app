@@ -72,18 +72,20 @@ export default {
     },
 
     getGroupChatId() {
+      this.authUser = this.$store.state.user;
       console.log(this.peerUser);
-      if (this.hashString(this.authUser.id) <= this.hashString(this.peerUser)) {
-        this.groupChatId = `${this.authUser.id}-${this.peerUser}`;
+      console.log(this.authUser);
+      if (this.hashString(this.authUser.userId) <= this.hashString(this.peerUser)) {
+        this.groupChatId = `${this.authUser.userId}-${this.peerUser}`;
       } else {
-        this.groupChatId = `${this.peerUser}-${this.authUser.id}`;
+        this.groupChatId = `${this.peerUser}-${this.authUser.userId}`;
       }
       store.dispatch("setChatId", this.groupChatId);
       console.log(this.groupChatId);
     },
     checkNotifications(){
         this.listenerNotify = db.collection("notifications")
-        .where('toUserId', '==', this.$store.state.user.id)
+        .where('toUserId', '==', this.$store.state.user.userId)
         .onSnapshot(querySnapshot => {
           let newNotification = [];
           querySnapshot.forEach(doc => {
@@ -92,18 +94,20 @@ export default {
           });
 
       });
-    }
+    },
+        checkNotificationsGrant(){
+            if (Notification.permission !== "denied") {
+                // If it's okay let's create a notification
+                Notification.requestPermission().then(function(permission) { 
+                  console.log('udzielono zgody');
+                });
+              }
+        },
   },
   beforeCreate() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         console.log("works");
-        db.collection("users")
-          .doc(user.uid)
-          .get()
-          .then(function(doc) {
-            store.dispatch("setSession", doc.data());
-          });
       } else {
         this.authUser = {};
       }
@@ -126,11 +130,14 @@ export default {
 
       if (mutation.type === "storeNotification") {
         //console.log(`Message from ${state.notification.fromUserName}`);
-        this.notifyMe(state.notification);
+        this.notify(state.notification);
       }
+
+      this.authUser = this.$store.state.user;
       
     });
-    this.checkNotifications();
+     this.checkNotificationsGrant();
+     this.checkNotifications();
   },
   beforeDestroy() {
     this.unsubscribe();

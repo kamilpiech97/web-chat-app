@@ -8,49 +8,38 @@
         :key="item.key"
         v-for="item in messages"
         class="text-left media w-50 mb-3 active"
-        :class="[item.userId === $store.state.user.id ? 'ml-auto':'']"
+        :class="[item.userId === $store.state.user.userId ? 'ml-auto':'']"
       >
         <!-- TEXT Message-->
-        <div class="media-body ml-3" v-if="item.type == 1">
+        <div class="media-body ml-3">
           <div
             class="rounded py-2 px-3 mb-2"
-            :class="[item.userId === $store.state.user.id?'bg-primary':'bg-dark']"
+            :class="[item.userId === $store.state.user.userId?'bg-primary':'bg-dark',item.status === 2 ? 'deleted-message':'']"
           >
-            <p
-              @click="checkNotifications()"
-              class="text-small mb-0"
-              :class="[item.userId === $store.state.user.id?'text-white':'text-white']"
-            >{{item.message}}</p>
+           <div v-if="item.status == 0 || item.status == 2">
+              <p
+                class="text-small text-white mb-0"
+                :class="[item.status === 2 ? 'font-weight-bold':'']"
+              >
+                {{item.message}}
+              </p>
+            </div>
+            <div v-else>
+              <img :src="item.message" class="img-fluid" />
+            </div>
           </div>
-          <small
-            v-on:click="deleteMessage(item.createdAt);"
-            v-if="item.userId === $store.state.user.id && item.deleted == 0"
-            class="delete-link"
-          >Usuń | </small>
-          <small
-            v-if="item.userId === $store.state.user.id"
-            class="small text-left text-muted"
-          >{{item.nickname}}</small>
-          <small class="small text-left text-muted" v-else>{{item.nickname}}</small>
-        </div>
-        <!-- PHOTO Message-->
-        <div class="media-body ml-3" v-if="item.type == 2">
-          <div
-            class="rounded py-2 px-3 mb-2"
-            :class="[item.userId === $store.state.user.id?'bg-primary':'bg-dark']"
-          >
-            <img :src="item.message" class="img-fluid" />
+          <div  :class="[item.userId === $store.state.user.userId ? 'nickname-text':'']">
+            <small
+              v-on:click="deleteMessage(item.Timestamp);"
+              v-if="item.userId === $store.state.user.userId && item.status != 2"
+              class="delete-link"
+            >Usuń | </small>
+            <small
+              v-if="item.userId === $store.state.user.userId"
+              class="small text-left text-muted"
+            >{{item.nickname}}</small>
+            <small class="small text-left text-muted" v-else>{{item.nickname}}</small>
           </div>
-          <small
-            v-on:click="deleteMessage(item.createdAt)"
-            v-if="item.userId === $store.state.user.id && item.deleted == 0"
-            class="delete-link"
-          >Usuń | </small>
-          <small
-            v-if="item.userId === $store.state.user.id"
-            class="small text-left text-muted"
-          >{{item.nickname}}</small>
-          <small class="small text-left text-muted" v-else>{{item.nickname}}</small>
         </div>
       </div>
     </div>
@@ -59,7 +48,7 @@
       <input
         type="text"
         v-model="message"
-        @keyup.enter="saveMessage(1)"
+        @keyup.enter="saveMessage(0)"
         placeholder="Type a message"
         aria-describedby="button-addon2"
         class="form-control rounded-0 border-0 py-4 bg-light"
@@ -74,7 +63,7 @@
           <font-awesome-icon icon="image" />
         </button>
         <button id="button-addon2" type="submit" class="btn btn-link">
-          <font-awesome-icon icon="paper-plane" v-on:click="saveMessage(1)" />
+          <font-awesome-icon icon="paper-plane" v-on:click="saveMessage(0)" />
         </button>
       </div>
     </div>
@@ -89,16 +78,19 @@ import Info from "@/components/Info.vue";
 import deleteMessage from "@/mixins/deleteMessage";
 import getNow from "@/mixins/getNow";
 import storePhoto from "@/mixins/storePhoto";
+import md5 from 'js-md5';
+import notifyMe from '../mixins/notifyMe';
 
 export default {
   name: "SingleChat",
-  mixins: [deleteMessage, getNow, storePhoto],
+  mixins: [deleteMessage, getNow, storePhoto, notifyMe],
   data() {
     return {
       message: "",
       file: null,
       messages: {},
-      chatId: {}
+      chatId: {},
+      typeOfRoom: {},
     };
   },
   components: {
@@ -111,11 +103,12 @@ export default {
       }
     },
     fetchMessages() {
+      console.log(this.typeOfRoom);
       this.listener = db
-        .collection("msg")
+        .collection(this.typeOfRoom)
         .doc(this.chatId)
         .collection(this.chatId)
-        .orderBy("createdAt")
+        .orderBy("Timestamp")
         .onSnapshot(querySnapshot => {
           let allMessages = [];
           querySnapshot.forEach(doc => {
@@ -127,37 +120,49 @@ export default {
           }, 10);
         });
     },
-    sendNotification(){
+    storeNotification(){
      db.collection("notifications")
         .doc(this.$store.state.currentPeerUser)
         .set({
           fromUserName: this.$store.state.user.nickname,
-          fromUserId: this.$store.state.user.id,
+          fromUserId: this.$store.state.user.userId,
           toUserId:this.$store.state.currentPeerUser,
           createdAt:this.getNow()
         })
     },
+    sendNotification(type){
+      if(type == 'privaterooms'){
+        this.storeNotification();
+      }
+    },
+
     scrollToBottom() {
       let box = document.querySelector(".chat-box");
       box.scrollTop = box.scrollHeight;
     },
 
+    randomUniqId(){
+      let uniqId = md5(this.email + (Math.random().toString(36).substring(2, 8)) + this.userId);
+      return uniqId;
+    },
+
     saveMessage(type) {
-      db.collection("msg")
+      db.collection(this.typeOfRoom)
         .doc(this.chatId)
         .collection(this.chatId)
         .doc(this.getNow())
         .set({
+          messageId: this.randomUniqId(),
           message: this.message,
-          userId: this.$store.state.user.id,
+          userId: this.$store.state.user.userId,
+          toUserId: this.$store.state.currentPeerUser,
           nickname: this.$store.state.user.nickname,
-          type: type,
-          deleted: "0",
-          createdAt: this.getNow()
+          status: type,
+          Timestamp: this.getNow()
         })
         .then(() => {
           this.message = null;
-          this.sendNotification();
+          this.sendNotification(this.typeOfRoom);
         });
       setTimeout(() => {
         this.scrollToBottom();
@@ -170,6 +175,7 @@ export default {
         console.log(`Updating to ${state.chatId}`);
         this.componentWillUnmount();
         this.chatId = this.$store.state.chatId;
+        this.typeOfRoom = this.$store.state.typeOfRoom;
         this.fetchMessages();
       }
     });
@@ -187,5 +193,16 @@ export default {
 .delete-link {
   color: red;
   cursor: pointer;
+}
+.deleted-message{
+  opacity: 0.5;
+}
+@media (max-width: 991px) {
+  .media {
+    width: 80%!important;
+}
+.nickname-text{
+  text-align: right;
+}
 }
 </style>

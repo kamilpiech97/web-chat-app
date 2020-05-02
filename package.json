@@ -16,6 +16,7 @@
     "bootstrap-vue": "^2.7.0",
     "core-js": "^3.6.4",
     "firebase": "^7.14.2",
+    "md5": "^2.2.1",
     "v-offline": "^1.2.1",
     "vue": "^2.6.11",
     "vue-online-prop": "^1.0.1",
@@ -29,6 +30,7 @@
     "@vue/cli-plugin-router": "~4.2.0",
     "@vue/cli-plugin-vuex": "~4.2.0",
     "@vue/cli-service": "~4.2.0",
+    "js-md5": "^0.7.3",
     "vue-online": "^1.1.9",
     "vue-template-compiler": "^2.6.11"
   }

@@ -13,6 +13,8 @@
 
 <script>
 import firebase from "firebase";
+import { mapGetters } from "vuex";
+import store from "../store";
 
 export default {
   methods: {
@@ -28,28 +30,35 @@ export default {
           if (user) {
             const result = await db
               .collection("users")
-              .where("id", "==", user.uid)
+              .where("userId", "==", user.uid)
               .get();
 
-            if (result.docs.length === 0) {
-              // Set new data since this is a new user
-              db.collection("users")
-                .doc(user.uid)
-                .set({
-                  id: user.uid,
-                  nickname: user.displayName,
-                  photoUrl: user.photoURL,
-                  status: "online"
-                })
-                .then(this.$router.push("/"));
-            } else {
-              db.collection("users")
-                .doc(user.uid)
-                .update({
-                  status: "online"
-                });
-              this.$router.push("/");
-            }
+              console.log('1');
+              if (result.docs.length === 0) {
+                db.collection("users")
+                  .doc(user.uid)
+                  .set({
+                    userId: user.uid,
+                    nickname: user.displayName,
+                    avatar: user.photoURL,
+                    status: "online"
+                  })
+                  .then(() =>{
+              console.log('2');
+                    let loginData = {
+                      userId: user.uid,
+                      nickname: user.displayName,
+                      avatar: user.photoURL,
+                    };
+                    console.log(loginData);
+              console.log('3');
+                    store.dispatch("setSession", loginData);
+                    this.$router.push("/")
+                  });
+              } else {
+                store.dispatch("setSession",  result.docs[0].data());
+                this.$router.push("/");
+              }
           } else {
             console.log("error");
           }

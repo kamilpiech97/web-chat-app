@@ -17,7 +17,7 @@
               <br />
               <img :src="this.photo" class="img-circle w-25" alt="Cinque Terre" />
               <br />
-              <input type="file" class="mt-2" @change="storePhoto($event);" />
+              <input type="file" class="mt-2" @change="storePhoto($event, 'avatar');" />
             </div>
             <div class="md-form mb-5 text-left">
               <i class="fas fa-user prefix grey-text"></i>
@@ -59,10 +59,10 @@ export default {
     },
     updateUser() {
       db.collection("users")
-        .doc(this.$store.state.user.id)
+        .doc(this.$store.state.user.userId)
         .update({
           nickname: this.nickname,
-          photoUrl: this.photo
+          avatar: this.photo
         })
         .then(() => {
           this.$store.state.user.nickname = this.nickname;
@@ -73,7 +73,7 @@ export default {
   },
   created() {
     this.nickname = this.$store.state.user.nickname;
-    this.photo = this.$store.state.user.photoUrl;
+    this.photo = this.$store.state.user.avatar;
   }
 };
 </script>

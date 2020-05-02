@@ -1,11 +1,10 @@
 export default {
     methods:{
-        notifyMe(user) {
+        notify(user) {
             if (!("Notification" in window) || this.checkPeerUser(user.fromUserId)) {
                 console.log("Alert");
             } else {
-                console.log("Message info");
-            var notification = new Notification("Nowa wiadomość od "+user.fromUserName);
+                var notification = new Notification("Nowa wiadomość od "+ user.fromUserName);
             }
         },
         checkPeerUser(id){

@@ -11,6 +11,7 @@ export default new Vuex.Store({
     chatId: null,
     notification: null,
     loading: false,
+    typeOfRoom: null,
   },
   getters: {
     getUser: state => state.user,
@@ -26,6 +27,9 @@ export default new Vuex.Store({
     storePeerUser(state, data) {
       state.currentPeerUser = data
     },
+    removePeerUser(state, data) {
+      state.currentPeerUser = data
+    },
     storePeerUserNickname(state, data) {
       state.currentPeerUserNickname = data
     },
@@ -37,6 +41,9 @@ export default new Vuex.Store({
     },
     storeNotification(state, data) {
       state.notification = data
+    },
+    storeTypeOfRoom(state, data) {
+      state.typeOfRoom = data
     },
     changeLoadingStatus(state, data) {
       state.loading = data
@@ -52,6 +59,11 @@ export default new Vuex.Store({
       commit
     }, data) {
       commit('storePeerUser', data)
+    },
+    removePeerUser({
+      commit
+    }, data) {
+      commit('removePeerUser', data)
     },
     setPeerUserNickname({
       commit
@@ -72,6 +84,11 @@ export default new Vuex.Store({
       commit
     }, data) {
       commit('storeNotification', data)
+    },
+    setTypeOfRoom({
+      commit
+    }, data) {
+      commit('storeTypeOfRoom', data)
     },
     setLoading({
       commit

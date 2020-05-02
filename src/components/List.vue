@@ -15,7 +15,7 @@
         <a v-on:click="showModal();" class="mr-3">
           <font-awesome-icon icon="cog" style="font-size:30px;" />
         </a>
-        <p class="h5 mb-0 py-1">{{ $store.state.user.nickname }}</p>
+        <p class="h5 mb-0 py-1">{{ this.$store.state.user.nickname }}</p>
       </div>
 
       <div class="messages-box">
@@ -30,14 +30,14 @@
         />
         <div class="list-group rounded-0">
           <a
-            v-on:click="changePeer(user.id, user.nickname);openMenu();"
+            v-on:click="changePeer(user.userId, user.nickname, 'privaterooms');openMenu();"
             :key="user.id"
-            v-for="user in filteredUsers"
+            v-for="user in users"
             class="list-group-item list-group-item-action list-group-item-light rounded-0"
-            :class="[user.id ===  $store.state.user.id ?'d-none':'', user.id ===  $store.state.currentPeerUser ? 'active text-white':'']"
+            :class="[user.userId ===  $store.state.user.userId ?'d-none':'', user.userId ===  $store.state.currentPeerUser ? 'active text-white':'']"
           >
             <div class="media">
-              <img v-bind:src="user.photoUrl" alt="user" width="50" class="rounded-circle" />
+              <img v-bind:src="user.avatar" alt="user" width="50" class="rounded-circle user-img" />
               <div class="media-body ml-4">
                 <div class="d-flex align-items-center justify-content-between mb-1">
                   <h6
@@ -52,16 +52,17 @@
             <h3>Grupy</h3>
           </a>
           <a
-            v-on:click="changeGroup(group.name)"
+            v-on:click="changeGroup(group, 'groupchat')"
             :key="group.id"
             v-for="group in groups"
             class="list-group-item list-group-item-action list-group-item-light rounded-0"
+            :class="[group ===  $store.state.chatId ? 'active text-white':'']"
           >
             <div class="media">
-              <img v-bind:src="group.photoUrl" alt="user" width="50" class="rounded-circle" />
+              <!-- <img v-bind:src="group.photoUrl" alt="user" width="50" class="rounded-circle" /> -->
               <div class="media-body ml-4">
                 <div class="d-flex align-items-center justify-content-between mb-1">
-                  <h6 class="mb-0">{{group.name}}</h6>
+                  <h6 class="mb-0">{{group}}</h6>
                 </div>
               </div>
             </div>
@@ -83,7 +84,7 @@ export default {
   data() {
     return {
       users: {},
-      groups: {},
+      groups: ['mems', 'start wars'],
       isModalVisible: false,
       user: "",
       search: "",
@@ -96,7 +97,7 @@ export default {
   computed: {
     filteredUsers: function() {
       return this.users.filter(user => {
-        return user.nickname.match(this.search);
+        return user.nickname.toLowerCase().includes(this.search.toLowerCase())
       });
     }
   },
@@ -111,13 +112,16 @@ export default {
       document.getElementById("messages-div").classList.toggle("active");
       console.log("open");
     },
-    changePeer(id, nickname) {
+    changePeer(id, nickname, type) {
+      store.dispatch("setTypeOfRoom", type);
       store.dispatch("setPeerUser", id);
       store.dispatch("setPeerUserNickname", nickname);
       console.log(this.$store.state.currentPeerUserNickname);
     },
-    changeGroup(name) {
+    changeGroup(name, type) {
       console.log(name);
+      store.dispatch("setTypeOfRoom", type);
+      store.dispatch("removePeerUser", name);
       store.dispatch("setGroup", name);
     },
     logout() {
@@ -145,14 +149,20 @@ export default {
       this.users = allUsers;
     });
 
-    let groups = db.collection("group").onSnapshot(querySnapshot => {
-      let allGroups = [];
-      querySnapshot.forEach(doc => {
-        allGroups.push(doc.data());
-      });
+    // let groups = db.collection("groupchats").onSnapshot(querySnapshot => {
+    //   let allGroups = [];
+    //   querySnapshot.forEach(doc => {
+    //     allGroups.push(doc.data());
+    //   });
 
-      this.groups = allGroups;
-    });
+    //   this.groups = allGroups;
+    // });
   }
 };
 </script>
+
+<style scoped>
+.user-img{
+  height: 50px;
+}
+</style>
