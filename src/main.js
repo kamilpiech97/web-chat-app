@@ -13,11 +13,13 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { faCog } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import VueOnlineProp from "vue-online-prop"
+import VueOnlineProp from "vue-online-prop";
+import VueFlashMessage from 'vue-flash-message';
 
 
 import firebase from "firebase";
 require("firebase/firestore");
+require('vue-flash-message/dist/vue-flash-message.min.css');
 
 library.add(faPaperPlane);
 library.add(faCog);
@@ -28,6 +30,8 @@ library.add(faBars);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
+
+Vue.use(VueFlashMessage);
 
 const config = {
   apiKey: "AIzaSyCVKbiumZ91iu_m72jb58-iaiSmtaWfHSA",

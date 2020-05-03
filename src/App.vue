@@ -66,7 +66,7 @@ body {
 
 .messages-box,
 .chat-box {
-  height: 93vh;
+  height: 95vh;
   overflow-y: scroll;
 }
 
@@ -97,6 +97,10 @@ a {
 }
 
 @media (max-width: 991px) {
+  .chat-box {
+    height: 90vh;
+    overflow-y: scroll;
+  }
   .mobile-close {
     display: block;
     position: absolute;
@@ -117,6 +121,12 @@ a {
   }
   .button-div {
     display: block !important;
+  }
+  .flash__message{
+    position: absolute!important;
+    z-index: 10001;
+    right: 10px!important;
+    top:10px!important;
   }
 }
 </style>

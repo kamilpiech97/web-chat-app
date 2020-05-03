@@ -17,7 +17,7 @@
               <br />
               <img :src="this.photo" class="img-circle w-25" alt="Cinque Terre" />
               <br />
-              <input type="file" class="mt-2" @change="storePhoto($event, 'avatar');" />
+              <input type="file" class="mt-2" @change="savePhoto($event, 'avatar');" />
             </div>
             <div class="md-form mb-5 text-left">
               <i class="fas fa-user prefix grey-text"></i>
@@ -42,10 +42,12 @@ import firebase, { auth } from "firebase";
 import { mapGetters } from "vuex";
 import store from "../store";
 import storePhoto from "@/mixins/storePhoto";
+import updateProfil from "@/mixins/updateProfil";
+import alert from "@/mixins/alert";
 
 export default {
   name: "modal",
-  mixins: [storePhoto],
+  mixins: [storePhoto, updateProfil, alert],
   data() {
     return {
       nickname: "",
@@ -55,21 +57,9 @@ export default {
   },
   methods: {
     close() {
+      this.$destroy;
       this.$emit("close");
     },
-    updateUser() {
-      db.collection("users")
-        .doc(this.$store.state.user.userId)
-        .update({
-          nickname: this.nickname,
-          avatar: this.photo
-        })
-        .then(() => {
-          this.$store.state.user.nickname = this.nickname;
-          this.$store.state.user.photoUrl = this.photo;
-          this.close();
-        });
-    }
   },
   created() {
     this.nickname = this.$store.state.user.nickname;
@@ -143,5 +133,9 @@ export default {
   background: #4aae9b;
   border: 1px solid #4aae9b;
   border-radius: 2px;
+}
+
+.modal {
+    overflow: auto!important;
 }
 </style>

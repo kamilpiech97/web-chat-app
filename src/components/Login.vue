@@ -33,32 +33,32 @@ export default {
               .where("userId", "==", user.uid)
               .get();
 
-              console.log('1');
-              if (result.docs.length === 0) {
-                db.collection("users")
-                  .doc(user.uid)
-                  .set({
+            console.log("1");
+            if (result.docs.length === 0) {
+              db.collection("users")
+                .doc(user.uid)
+                .set({
+                  userId: user.uid,
+                  nickname: user.displayName,
+                  avatar: user.photoURL,
+                  status: "online"
+                })
+                .then(() => {
+                  console.log("2");
+                  let loginData = {
                     userId: user.uid,
                     nickname: user.displayName,
-                    avatar: user.photoURL,
-                    status: "online"
-                  })
-                  .then(() =>{
-              console.log('2');
-                    let loginData = {
-                      userId: user.uid,
-                      nickname: user.displayName,
-                      avatar: user.photoURL,
-                    };
-                    console.log(loginData);
-              console.log('3');
-                    store.dispatch("setSession", loginData);
-                    this.$router.push("/")
-                  });
-              } else {
-                store.dispatch("setSession",  result.docs[0].data());
-                this.$router.push("/");
-              }
+                    avatar: user.photoURL
+                  };
+                  console.log(loginData);
+                  console.log("3");
+                  store.dispatch("setSession", loginData);
+                  this.$router.push("/");
+                });
+            } else {
+              store.dispatch("setSession", result.docs[0].data());
+              this.$router.push("/");
+            }
           } else {
             console.log("error");
           }
@@ -86,6 +86,17 @@ export default {
         avatar: user.photoURL
       });
     }
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          next("/");
+        }else{
+          next();
+        }
+      });
+    });
   }
 };
 </script>

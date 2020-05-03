@@ -5,6 +5,7 @@
         <div v-if="!$online" class="offline-box">
           <h1 class="bg-danger text-white">Brak internetu!</h1>
         </div>
+        <flash-message transitionIn="animated swing" class="alert-box"></flash-message>
         <List />
         <SingleChat />
       </div>
@@ -114,6 +115,7 @@ export default {
     });
   },
   created() {
+    console.log(this.$store.state.user.nickname);
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "storeGroup") {
         console.log(`Updating to ${state.chatId}`);
@@ -131,6 +133,11 @@ export default {
       if (mutation.type === "storeNotification") {
         //console.log(`Message from ${state.notification.fromUserName}`);
         this.notify(state.notification);
+      }
+
+      if (mutation.type === "logoutUser") {
+        console.log(`Notify end!`);
+        this.listenerNotify();
       }
 
       this.authUser = this.$store.state.user;
@@ -165,5 +172,15 @@ export default {
 }
 .offline-box h1 {
   line-height: 6rem;
+}
+.alert-box{
+  position: absolute;
+  z-index: 1051;
+  right: 10px;
+  top: 10px;
+}
+
+.alert-box .danger{
+  background: #a94442!important;
 }
 </style>

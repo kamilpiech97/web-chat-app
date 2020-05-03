@@ -1,8 +1,8 @@
 <template>
   <!-- Chat Box-->
   <div class="col-lg-9 px-0 chat-div">
-    <!-- <Info v-if="this.$store.state.currentPeerUser"/> -->
-    <div class="px-4 py-5 chat-box bg-white">
+    <Info v-if="this.typeOfRoom.length === 0"/>
+    <div class="px-4 py-5 chat-box bg-white" ref="chatBox">
       <!-- Sender Message-->
       <div
         :key="item.key"
@@ -59,7 +59,7 @@
           class="btn btn-link"
           onclick="document.getElementById('fileInput').click()"
         >
-          <input id="fileInput" type="file" style="display:none" @change="storePhoto($event);" />
+          <input id="fileInput" type="file" style="display:none" @change="savePhoto($event);" />
           <font-awesome-icon icon="image" />
         </button>
         <button id="button-addon2" type="submit" class="btn btn-link">
@@ -80,17 +80,20 @@ import getNow from "@/mixins/getNow";
 import storePhoto from "@/mixins/storePhoto";
 import md5 from 'js-md5';
 import notifyMe from '../mixins/notifyMe';
+import scroll from '../mixins/scroll';
+import saveMessage from '../mixins/saveMessage';
+import alert from '../mixins/alert';
 
 export default {
   name: "SingleChat",
-  mixins: [deleteMessage, getNow, storePhoto, notifyMe],
+  mixins: [deleteMessage, getNow, storePhoto, notifyMe, scroll, saveMessage, alert],
   data() {
     return {
       message: "",
       file: null,
       messages: {},
       chatId: {},
-      typeOfRoom: {},
+      typeOfRoom: "",
     };
   },
   components: {
@@ -136,38 +139,11 @@ export default {
       }
     },
 
-    scrollToBottom() {
-      let box = document.querySelector(".chat-box");
-      box.scrollTop = box.scrollHeight;
-    },
-
     randomUniqId(){
       let uniqId = md5(this.email + (Math.random().toString(36).substring(2, 8)) + this.userId);
       return uniqId;
     },
-
-    saveMessage(type) {
-      db.collection(this.typeOfRoom)
-        .doc(this.chatId)
-        .collection(this.chatId)
-        .doc(this.getNow())
-        .set({
-          messageId: this.randomUniqId(),
-          message: this.message,
-          userId: this.$store.state.user.userId,
-          toUserId: this.$store.state.currentPeerUser,
-          nickname: this.$store.state.user.nickname,
-          status: type,
-          Timestamp: this.getNow()
-        })
-        .then(() => {
-          this.message = null;
-          this.sendNotification(this.typeOfRoom);
-        });
-      setTimeout(() => {
-        this.scrollToBottom();
-      }, 70);
-    }
+    
   },
   created() {
     this.unsubscribe = this.$store.subscribe((mutation, state) => {

@@ -1,28 +1,40 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+  plugins: [createPersistedState()],
   state: {
-    user: null,
+    user: {
+      avatar:null,
+      nickname:null,
+      status:null,
+      userId:null
+    },
     currentPeerUser: null,
     currentPeerUserNickname: null,
     chatId: null,
     notification: null,
-    loading: false,
     typeOfRoom: null,
+    alert: null,
   },
   getters: {
     getUser: state => state.user,
     getPeerUser: state => state.currentPeerUser,
     getPeerUserNickanme: state => state.currentPeerUserNickname,
     getChatId: state => state.chatId,
-    getLoading: state => state.loading,
   },
   mutations: {
     storeUser(state, data) {
       state.user = data
+    },
+    storeUserName(state, data) {
+      state.user.nickname = data
+    },
+    storeUserAvatar(state, data) {
+      state.user.avatar = data
     },
     storePeerUser(state, data) {
       state.currentPeerUser = data
@@ -42,11 +54,14 @@ export default new Vuex.Store({
     storeNotification(state, data) {
       state.notification = data
     },
+    logoutUser(state, data) {
+      state.notification = data;
+    },
     storeTypeOfRoom(state, data) {
       state.typeOfRoom = data
     },
-    changeLoadingStatus(state, data) {
-      state.loading = data
+    storeAlert(state, data) {
+      state.alert = data
     }
   },
   actions: {
@@ -54,6 +69,12 @@ export default new Vuex.Store({
       commit
     }, data) {
       commit('storeUser', data)
+    },
+    updateUser({
+      commit
+    }, data) {
+      commit('storeUserName', data.nickname)
+      commit('storeUserAvatar', data.avatar)
     },
     setPeerUser({
       commit
@@ -85,15 +106,20 @@ export default new Vuex.Store({
     }, data) {
       commit('storeNotification', data)
     },
+    logout({
+      commit
+    }, data) {
+      commit('logoutUser', data)
+    },
     setTypeOfRoom({
       commit
     }, data) {
       commit('storeTypeOfRoom', data)
     },
-    setLoading({
+    setAlert({
       commit
     }, data) {
-      commit('changeLoadingStatus', data)
+      commit('storeAlert', data)
     },
   }
 })

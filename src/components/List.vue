@@ -8,7 +8,7 @@
       </a>
     </div>
     <div class="bg-white messages-div" id="messages-div">
-      <div class="bg-gray px-4 py-2 bg-light d-flex">
+      <div class="bg-gray px-4 py-2 bg-light d-flex mini-dashboard">
         <a v-on:click="logout();" class="mr-3">
           <font-awesome-icon icon="sign-out-alt" style="font-size:30px;" />
         </a>
@@ -19,9 +19,9 @@
       </div>
 
       <div class="messages-box">
-        <a>
+        <div class="list-header">
           <h3>Użytkownicy</h3>
-        </a>
+        </div>
         <input
           type="text"
           class="w-100 form-control rounded-0 border-0 py-4 bg-light border-top-1"
@@ -32,7 +32,7 @@
           <a
             v-on:click="changePeer(user.userId, user.nickname, 'privaterooms');openMenu();"
             :key="user.id"
-            v-for="user in users"
+            v-for="user in filteredUsers"
             class="list-group-item list-group-item-action list-group-item-light rounded-0"
             :class="[user.userId ===  $store.state.user.userId ?'d-none':'', user.userId ===  $store.state.currentPeerUser ? 'active text-white':'']"
           >
@@ -48,9 +48,9 @@
               </div>
             </div>
           </a>
-          <a>
+          <div class="list-header">
             <h3>Grupy</h3>
-          </a>
+          </div>
           <a
             v-on:click="changeGroup(group, 'groupchat')"
             :key="group.id"
@@ -83,8 +83,8 @@ export default {
   name: "SingleChat",
   data() {
     return {
-      users: {},
-      groups: ['mems', 'start wars'],
+      users: [],
+      groups: ["mems", "start wars"],
       isModalVisible: false,
       user: "",
       search: "",
@@ -95,9 +95,9 @@ export default {
     Modal
   },
   computed: {
-    filteredUsers: function() {
+    filteredUsers() {
       return this.users.filter(user => {
-        return user.nickname.toLowerCase().includes(this.search.toLowerCase())
+        return user.nickname.toLowerCase().includes(this.search.toLowerCase());
       });
     }
   },
@@ -130,7 +130,8 @@ export default {
         .signOut()
         .then(
           function() {
-            this.$router.push("/login");
+            store.dispatch("logout", 0);
+            router.stateService.go('/login');
           },
           function(error) {
             console.log(error);
@@ -162,7 +163,19 @@ export default {
 </script>
 
 <style scoped>
-.user-img{
+.user-img {
   height: 50px;
+}
+.list-header {
+  display: flex;
+  align-items: center;
+  background: white;
+  font-weight: 700;
+  text-align: left;
+  padding-left: 10px;
+  height: 75px;
+}
+.mini-dashboard{
+  overflow: scroll;
 }
 </style>
