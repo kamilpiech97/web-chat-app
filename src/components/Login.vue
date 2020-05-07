@@ -2,7 +2,7 @@
   <div>
     <div class="d-flex align-items-center login-box">
       <div class="m-auto">
-        <h2>Zaloguj się za pomocą Google i korzystaj!</h2>
+        <h2>{{this.text}}</h2>
         <img src="../assets/googlelogo.png" alt class="mt-2 mb-2" />
         <br />
         <button @click="login" class="btn-lg">Logowanie</button>
@@ -17,6 +17,11 @@ import { mapGetters } from "vuex";
 import store from "../store";
 
 export default {
+  data() {
+    return {
+      text: "Zaloguj się za pomocą Google i korzystaj!",
+    };
+  },
   methods: {
     login() {
       var provider = new firebase.auth.GoogleAuthProvider();

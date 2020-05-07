@@ -10,7 +10,7 @@
         class="text-left media w-50 mb-3 active"
         :class="[item.userId === $store.state.user.userId ? 'ml-auto':'']"
       >
-        <!-- TEXT Message-->
+        <!-- Message -->
         <div class="media-body ml-3">
           <div
             class="rounded py-2 px-3 mb-2"
@@ -30,7 +30,7 @@
           </div>
           <div  :class="[item.userId === $store.state.user.userId ? 'nickname-text':'']">
             <small
-              v-on:click="deleteMessage(item.Timestamp);"
+              v-on:click="deleteMessage(item.messageId);"
               v-if="item.userId === $store.state.user.userId && item.status != 2"
               class="delete-link"
             >Usuń | </small>
@@ -73,20 +73,20 @@
 <script>
 import { mapGetters } from "vuex";
 import store from "../store";
-import firebase, { auth, firestorage } from "firebase";
+import firebase, { auth, firestorage, Timestamp  } from "firebase";
 import Info from "@/components/Info.vue";
 import deleteMessage from "@/mixins/deleteMessage";
 import getNow from "@/mixins/getNow";
 import storePhoto from "@/mixins/storePhoto";
-import md5 from 'js-md5';
 import notifyMe from '../mixins/notifyMe';
 import scroll from '../mixins/scroll';
 import saveMessage from '../mixins/saveMessage';
 import alert from '../mixins/alert';
+import storeNotification from '../mixins/storeNotification';
 
 export default {
   name: "SingleChat",
-  mixins: [deleteMessage, getNow, storePhoto, notifyMe, scroll, saveMessage, alert],
+  mixins: [deleteMessage, getNow, storePhoto, notifyMe, scroll, saveMessage, alert, storeNotification],
   data() {
     return {
       message: "",
@@ -111,7 +111,7 @@ export default {
         .collection(this.typeOfRoom)
         .doc(this.chatId)
         .collection(this.chatId)
-        .orderBy("Timestamp")
+        .orderBy("timestamp")
         .onSnapshot(querySnapshot => {
           let allMessages = [];
           querySnapshot.forEach(doc => {
@@ -122,26 +122,6 @@ export default {
             this.scrollToBottom();
           }, 10);
         });
-    },
-    storeNotification(){
-     db.collection("notifications")
-        .doc(this.$store.state.currentPeerUser)
-        .set({
-          fromUserName: this.$store.state.user.nickname,
-          fromUserId: this.$store.state.user.userId,
-          toUserId:this.$store.state.currentPeerUser,
-          createdAt:this.getNow()
-        })
-    },
-    sendNotification(type){
-      if(type == 'privaterooms'){
-        this.storeNotification();
-      }
-    },
-
-    randomUniqId(){
-      let uniqId = md5(this.email + (Math.random().toString(36).substring(2, 8)) + this.userId);
-      return uniqId;
     },
     
   },

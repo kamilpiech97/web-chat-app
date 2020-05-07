@@ -13,6 +13,7 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { faCog } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
 import VueOnlineProp from "vue-online-prop";
 import VueFlashMessage from 'vue-flash-message';
 
@@ -34,13 +35,22 @@ Vue.use(IconsPlugin);
 Vue.use(VueFlashMessage);
 
 const config = {
-  apiKey: "AIzaSyCVKbiumZ91iu_m72jb58-iaiSmtaWfHSA",
-  authDomain: "vue-test-31727.firebaseapp.com",
-  databaseURL: "https://vue-test-31727.firebaseio.com",
-  projectId: "vue-test-31727",
-  storageBucket: "vue-test-31727.appspot.com",
-  messagingSenderId: "344612897431"
+  apiKey: 'AIzaSyB3vWU0XV5VuqRBrar-0J8JSAq9cf_kTwo',
+  authDomain: 'chatapp-da38a.firebaseapp.com',
+  databaseURL: 'https://chatapp-da38a.firebaseio.com',
+  projectId: 'chatapp-da38a',
+  storageBucket: 'chatapp-da38a.appspot.com',
+  messagingSenderId: '845839281342',
+  appId: '1:845839281342:web:12979703762298984102ef'
 };
+// const config = {
+//   apiKey: "AIzaSyCVKbiumZ91iu_m72jb58-iaiSmtaWfHSA",
+//   authDomain: "vue-test-31727.firebaseapp.com",
+//   databaseURL: "https://vue-test-31727.firebaseio.com",
+//   projectId: "vue-test-31727",
+//   storageBucket: "vue-test-31727.appspot.com",
+//   messagingSenderId: "344612897431"
+// };
 
 
 firebase.initializeApp(config);

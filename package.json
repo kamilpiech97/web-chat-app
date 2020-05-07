@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
     "@deveodk/vue-toastr": "^1.1.0",
@@ -17,6 +18,7 @@
     "core-js": "^3.6.4",
     "firebase": "^7.14.2",
     "md5": "^2.2.1",
+    "sinon": "^9.0.2",
     "v-offline": "^1.2.1",
     "vee-validate": "^3.3.0",
     "vue": "^2.6.11",
@@ -31,8 +33,12 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.2.0",
     "@vue/cli-plugin-router": "~4.2.0",
+    "@vue/cli-plugin-unit-jest": "^4.3.1",
     "@vue/cli-plugin-vuex": "~4.2.0",
     "@vue/cli-service": "~4.2.0",
+    "@vue/test-utils": "1.0.0-beta.31",
+    "firebase-mock": "^2.3.2",
+    "firestore-jest-mock": "^0.3.0",
     "js-md5": "^0.7.3",
     "vue-online": "^1.1.9",
     "vue-template-compiler": "^2.6.11"

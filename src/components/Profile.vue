@@ -13,16 +13,16 @@
           <slot name="body">
             <div class="md-form mb-5 text-left">
               <i class="fas fa-user prefix grey-text"></i>
-              <label class="mt-3" for="form34">Avatar</label>
+              <label class="mt-3" for="avatar">Avatar</label>
               <br />
-              <img :src="this.photo" class="img-circle w-25" alt="Cinque Terre" />
+              <img :src="this.photo" id="avatar" class="img-circle w-25" alt="Cinque Terre" />
               <br />
-              <input type="file" class="mt-2" @change="savePhoto($event, 'avatar');" />
+              <input type="file" class="mt-2"@change="savePhoto($event, 'avatar');" />
             </div>
             <div class="md-form mb-5 text-left">
               <i class="fas fa-user prefix grey-text"></i>
-              <label for="form34">Nazwa użytkownika</label>
-              <input type="text" id="form34" class="form-control" v-model="nickname" />
+              <label for="nickname">Nazwa użytkownika</label>
+              <input type="text"  ref="nickname" id="nickname" class="form-control" v-model="nickname" />
             </div>
           </slot>
         </section>
