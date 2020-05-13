@@ -1,5 +1,5 @@
 import md5 from 'js-md5';
-import firebase, { Timestamp  } from "firebase";
+import firebase, { Timestamp } from "firebase";
 
 export default {
   methods: {

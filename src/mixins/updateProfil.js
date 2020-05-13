@@ -16,7 +16,7 @@ export default {
                 .update(user)
                 .then(() => {
                     this.$store.dispatch("updateUser", user);
-                    this.close();
+                    this.closeAfterUpdate();
                 });
         },
         validateProfilData() {

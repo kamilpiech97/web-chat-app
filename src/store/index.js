@@ -10,8 +10,8 @@ export default new Vuex.Store({
     user: {
       avatar:null,
       nickname:null,
-      status:null,
-      userId:null
+      userId:null,
+      email:null
     },
     currentPeerUser: null,
     currentPeerUserNickname: null,
@@ -56,6 +56,11 @@ export default new Vuex.Store({
     },
     logoutUser(state, data) {
       state.notification = data;
+      state.user = data;
+      state.currentPeerUser = data;
+      state.currentPeerUserNickname = data;
+      state.chatId = data;
+      state.typeOfRoom = data;
     },
     storeTypeOfRoom(state, data) {
       state.typeOfRoom = data

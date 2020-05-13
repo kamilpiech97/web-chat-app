@@ -100,7 +100,7 @@ export default {
     Info
   },
   methods: {
-    componentWillUnmount() {
+    unmount() {
       if (this.listener) {
         this.listener();
       }
@@ -129,7 +129,7 @@ export default {
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "storeChatId") {
         console.log(`Updating to ${state.chatId}`);
-        this.componentWillUnmount();
+        this.unmount();
         this.chatId = this.$store.state.chatId;
         this.typeOfRoom = this.$store.state.typeOfRoom;
         this.fetchMessages();

@@ -6,7 +6,9 @@
         <header class="modal-header">
           <slot name="header">
             <h3 class="text-dark">Edycja konta</h3>
-            <button type="button" class="btn-close" @click="close">x</button>
+           <router-link to="/">
+              <button type="button" class="btn-close">x</button>
+           </router-link>
           </slot>
         </header>
         <section class="modal-body">
@@ -17,7 +19,7 @@
               <br />
               <img :src="this.photo" id="avatar" class="img-circle w-25" alt="Cinque Terre" />
               <br />
-              <input type="file" class="mt-2"@change="savePhoto($event, 'avatar');" />
+              <input type="file" class="mt-2" @change="savePhoto($event, 'avatar');" />
             </div>
             <div class="md-form mb-5 text-left">
               <i class="fas fa-user prefix grey-text"></i>
@@ -28,7 +30,9 @@
         </section>
         <footer class="modal-footer">
           <slot name="footer">
-            <button type="button" class="btn-danger" @click="close">Zamknij</button>
+            <router-link to="/"> 
+              <button type="button" class="btn-danger">Zamknij</button>
+            </router-link>
             <button type="button" class="btn-green" @click="updateUser">Zapisz</button>
           </slot>
         </footer>
@@ -43,10 +47,10 @@ import { mapGetters } from "vuex";
 import store from "../store";
 import storePhoto from "@/mixins/storePhoto";
 import updateProfil from "@/mixins/updateProfil";
-import alert from "@/mixins/alert";
+import alert from '../mixins/alert';
 
 export default {
-  name: "modal",
+  name: "Profile",
   mixins: [storePhoto, updateProfil, alert],
   data() {
     return {
@@ -56,9 +60,8 @@ export default {
     };
   },
   methods: {
-    close() {
-      this.$destroy;
-      this.$emit("close");
+    closeAfterUpdate() {
+      this.$router.push('/');
     },
   },
   created() {

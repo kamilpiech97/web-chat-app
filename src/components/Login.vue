@@ -1,11 +1,24 @@
 <template>
   <div>
+    <flash-message transitionIn="animated swing" class="alert-box"></flash-message>
     <div class="d-flex align-items-center login-box">
       <div class="m-auto">
         <h2>{{this.text}}</h2>
-        <img src="../assets/googlelogo.png" alt class="mt-2 mb-2" />
+        <p class="text-danger">{{this.info}}</p>
         <br />
-        <button @click="login" class="btn-lg">Logowanie</button>
+            <div class="md-form mb-5 text-left">
+              <i class="fas fa-user prefix grey-text"></i>
+              <label for="nickname">Email</label>
+              <input type="email"  ref="email" id="email" class="form-control" v-model="email" required/>
+            </div>
+            <div class="md-form mb-5 text-left">
+              <i class="fas fa-user prefix grey-text"></i>
+              <label for="nickname">Hasło</label>
+              <input type="password"  ref="password" id="password" class="form-control" v-model="password" required/>
+            </div>
+        <button @click="login" class="btn-lg">Zaloguj</button><br><br>
+        <router-link to="/rejestracja"><button class="btn-sm btn-info">Zarejestruj się!</button></router-link><br><br>
+        <router-link to="/reset"><button class="btn-sm btn-info">Nie pamiętasz hasła?</button></router-link>
       </div>
     </div>
   </div>
@@ -13,96 +26,47 @@
 
 <script>
 import firebase from "firebase";
-import { mapGetters } from "vuex";
+import { mapGetters,mapMutations,mapActions } from "vuex";
 import store from "../store";
+import alert from "../mixins/alert";
 
 export default {
+  name: "Login",
+  mixins: [alert],
   data() {
     return {
-      text: "Zaloguj się za pomocą Google i korzystaj!",
+      text: "Logowanie",
+      password:null,
+      email:null,
+      info:''
     };
   },
   methods: {
+    go(){
+      this.$router.push('/')
+    },
     login() {
-      var provider = new firebase.auth.GoogleAuthProvider();
-      provider.addScope("https://www.googleapis.com/auth/contacts.readonly");
-
-      firebase
-        .auth()
-        .signInWithPopup(provider)
+      this.info = '';
+      firebase.auth().signInWithEmailAndPassword(this.email, this.password)
         .then(async result => {
-          let user = result.user;
-          if (user) {
-            const result = await db
-              .collection("users")
-              .where("userId", "==", user.uid)
-              .get();
-
-            console.log("1");
-            if (result.docs.length === 0) {
-              db.collection("users")
-                .doc(user.uid)
-                .set({
-                  userId: user.uid,
-                  nickname: user.displayName,
-                  avatar: user.photoURL,
-                  status: "online"
+            let user = result.user;
+            if(user) {
+                firebase.firestore().collection('users')
+                .where('userId' , "==", user.uid)
+                .get()
+                .then(function(querySnapshot){
+                    querySnapshot.forEach(function(doc) {
+                        const userData = doc.data()
+                        store.dispatch("setSession", userData);
+                    })
                 })
-                .then(() => {
-                  console.log("2");
-                  let loginData = {
-                    userId: user.uid,
-                    nickname: user.displayName,
-                    avatar: user.photoURL
-                  };
-                  console.log(loginData);
-                  console.log("3");
-                  store.dispatch("setSession", loginData);
-                  this.$router.push("/");
-                });
-            } else {
-              store.dispatch("setSession", result.docs[0].data());
-              this.$router.push("/");
+                this.$router.push('/');
             }
-          } else {
-            console.log("error");
-          }
+        }).catch( () => {
+            this.alert('Logowanie nie prawidłowe!', 'error');
         })
-        .catch(err => {
-          console.log(err);
-        });
     },
-    checkUser() {
-      var result = db
-        .collection("users")
-        .where("id", "==", user.uid)
-        .get();
-      if (result) {
-        console.log("logged");
-      } else {
-        console.log("no logged");
-        newUser(user);
-      }
-    },
-    newUser(user) {
-      db.collection("users").add({
-        id: user.uid,
-        name: user.displayName,
-        avatar: user.photoURL
-      });
-    }
   },
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-          next("/");
-        }else{
-          next();
-        }
-      });
-    });
-  }
 };
 </script>
 

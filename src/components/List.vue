@@ -1,7 +1,6 @@
 <template>
   <!-- Users box-->
   <div class="col-lg-3 px-0">
-    <modal v-show="isModalVisible" @close="closeModal" />
     <div class="button-div">
       <a v-on:click="openMenu();">
         <font-awesome-icon icon="bars" style="font-size:30px;" />
@@ -12,10 +11,11 @@
         <a v-on:click="logout();" class="mr-3">
           <font-awesome-icon icon="sign-out-alt" style="font-size:30px;" />
         </a>
-        <a v-on:click="showModal();" class="mr-3">
-          <font-awesome-icon icon="cog" style="font-size:30px;" />
-        </a>
-        <p class="h5 mb-0 py-1">{{ this.$store.state.user.nickname }}</p>
+        <router-link to="/profil">
+          <a class="mr-3">
+            <font-awesome-icon icon="cog" style="font-size:30px;" />
+          </a>
+        </router-link>
       </div>
 
       <div class="messages-box">
@@ -42,7 +42,6 @@
                 <div class="d-flex align-items-center justify-content-between mb-1">
                   <h6
                     class="mb-0"
-                    :class="[user.status === 'online' ? 'text-success': 'text-danger']"
                   >{{user.nickname}}</h6>
                 </div>
               </div>
@@ -81,12 +80,12 @@ import Modal from "@/components/Profile.vue";
 
 export default {
   name: "SingleChat",
-  data() {
+  data () {
     return {
       users: [],
       groups: ["mems", "start wars"],
       isModalVisible: false,
-      user: "",
+      user: {},
       search: "",
       notification: {}
     };
@@ -130,8 +129,7 @@ export default {
         .signOut()
         .then(
           function() {
-            store.dispatch("logout", 0);
-            router.stateService.go('/login');
+            store.dispatch("logout", null);
           },
           function(error) {
             console.log(error);
@@ -149,15 +147,6 @@ export default {
 
       this.users = allUsers;
     });
-
-    // let groups = db.collection("groupchats").onSnapshot(querySnapshot => {
-    //   let allGroups = [];
-    //   querySnapshot.forEach(doc => {
-    //     allGroups.push(doc.data());
-    //   });
-
-    //   this.groups = allGroups;
-    // });
   }
 };
 </script>

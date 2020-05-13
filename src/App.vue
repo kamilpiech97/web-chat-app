@@ -96,6 +96,17 @@ a {
   border-color: black !important;
 }
 
+.alert-box {
+  position: absolute;
+  z-index: 1051;
+  right: 10px;
+  top: 10px;
+}
+
+.alert-box .danger {
+  background: #a94442 !important;
+}
+
 @media (max-width: 991px) {
   .chat-box {
     height: 90vh;
