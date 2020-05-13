@@ -16,9 +16,9 @@
               <label for="nickname">Hasło</label>
               <input type="password"  ref="password" id="password" class="form-control" v-model="password" required/>
             </div>
-        <button @click="login" class="btn-lg">Zaloguj</button><br><br>
-        <router-link to="/rejestracja"><button class="btn-sm btn-info">Zarejestruj się!</button></router-link><br><br>
-        <router-link to="/reset"><button class="btn-sm btn-info">Nie pamiętasz hasła?</button></router-link>
+        <button @click="login" id="login" class="btn-lg">Zaloguj</button><br><br>
+        <router-link to="/rejestracja"><button id="register" class="btn-sm btn-info">Zarejestruj się!</button></router-link><br><br>
+        <router-link to="/reset"><button id="reset" class="btn-sm btn-info">Nie pamiętasz hasła?</button></router-link>
       </div>
     </div>
   </div>

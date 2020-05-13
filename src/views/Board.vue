@@ -109,8 +109,6 @@ export default {
     },
   },
   created() {
-    console.log(this.$store.state.user.userId);
-    console.log(store.state.user.userId);
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "storeGroup") {
         this.authUser = this.$store.state.user;

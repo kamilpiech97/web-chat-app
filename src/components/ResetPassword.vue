@@ -10,8 +10,8 @@
               <label for="nickname">Email</label>
               <input type="email"  ref="email" id="email" class="form-control" v-model="email" required/>
             </div>
-        <button @click="reset" class="btn-lg">Resetuj</button><br><br>
-        <router-link to="/logowanie"><button class="btn-sm btn-info">Zaloguj się!</button></router-link>
+        <button @click="reset" id="reset" class="btn-lg">Resetuj</button><br><br>
+        <router-link to="/logowanie"><button id="login" class="btn-sm btn-info">Zaloguj się!</button></router-link>
       </div>
     </div>
   </div>

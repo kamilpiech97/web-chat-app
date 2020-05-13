@@ -1,6 +1,7 @@
 
 <template>
   <div class="modal-backdrop">
+    <flash-message transitionIn="animated swing" class="alert-box"></flash-message>
     <div class="modal">
       <div class="modal-body">
         <header class="modal-header">
