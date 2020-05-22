@@ -83,9 +83,8 @@ export default {
   data () {
     return {
       users: [],
-      groups: ["mems", "start wars"],
+      groups: ["mems", "star wars"],
       isModalVisible: false,
-      user: {},
       search: "",
       notification: {}
     };

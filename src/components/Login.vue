@@ -42,9 +42,6 @@ export default {
     };
   },
   methods: {
-    go(){
-      this.$router.push('/')
-    },
     login() {
       this.info = '';
       firebase.auth().signInWithEmailAndPassword(this.email, this.password)

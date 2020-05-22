@@ -27,6 +27,11 @@
               <label for="nickname">Nazwa użytkownika</label>
               <input type="text"  ref="nickname" id="nickname" class="form-control" v-model="nickname" />
             </div>
+            <div class="md-form mb-5 text-left">
+              <i class="fas fa-user prefix grey-text"></i>
+              <label for="nickname">Resetuj hasło</label><br>
+              <button type="button" class="btn-primary" @click="resetPassword()">Resetuj</button>
+            </div>
           </slot>
         </section>
         <footer class="modal-footer">
@@ -49,15 +54,17 @@ import store from "../store";
 import storePhoto from "@/mixins/storePhoto";
 import updateProfil from "@/mixins/updateProfil";
 import alert from '../mixins/alert';
+import reset from "../mixins/reset";
 
 export default {
   name: "Profile",
-  mixins: [storePhoto, updateProfil, alert],
+  mixins: [storePhoto, updateProfil, alert, reset],
   data() {
     return {
       nickname: "",
       file: "",
-      photo: ""
+      photo: "",
+      email: this.$store.state.user.email
     };
   },
   methods: {
@@ -68,6 +75,7 @@ export default {
   created() {
     this.nickname = this.$store.state.user.nickname;
     this.photo = this.$store.state.user.avatar;
+    this.email = this.$store.state.user.email;
   }
 };
 </script>

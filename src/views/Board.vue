@@ -126,7 +126,7 @@ export default {
       }
 
       if (mutation.type === "logoutUser") {
-        this.listenerNotify();
+        this.unmountNotifications();
       }
 
 
