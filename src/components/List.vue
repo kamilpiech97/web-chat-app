@@ -49,7 +49,7 @@
             <h3>Grupy</h3>
           </div>
           <a
-            v-on:click="changeGroup(group, 'groupchat')"
+            v-on:click="changeGroup(group, 'groupchat');openMenu();"
             :key="group.id"
             v-for="group in groups"
             class="list-group-item list-group-item-action list-group-item-light rounded-0"
@@ -112,7 +112,6 @@ export default {
       store.dispatch("setTypeOfRoom", type);
       store.dispatch("setPeerUser", id);
       store.dispatch("setPeerUserNickname", nickname);
-      console.log(this.$store.state.currentPeerUserNickname);
     },
     changeGroup(name, type) {
       console.log(name);
@@ -129,7 +128,6 @@ export default {
             store.dispatch("logout", null);
           },
           function(error) {
-            console.log(error);
           }
         );
     }

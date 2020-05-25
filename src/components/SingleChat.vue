@@ -47,7 +47,6 @@
       <input
         type="text"
         v-model="message"
-        @keyup.enter="saveMessage(0)"
         placeholder="Type a message"
         aria-describedby="button-addon2"
         class="form-control rounded-0 border-0 py-4 bg-light"
@@ -114,7 +113,6 @@ export default {
       }
     },
     fetchMessages() {
-      console.log(this.typeOfRoom);
       this.listener = db
         .collection(this.typeOfRoom)
         .doc(this.chatId)
@@ -135,7 +133,6 @@ export default {
   created() {
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "storeChatId") {
-        console.log(`Updating to ${state.chatId}`);
         this.unmount();
         this.chatId = this.$store.state.chatId;
         this.typeOfRoom = this.$store.state.typeOfRoom;

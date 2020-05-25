@@ -39,8 +39,6 @@ export default {
       console.log(status);
     },
     hashString(str) {
-      console.log(this.peerUser);
-      console.log(this.authUser);
       let hash = 0;
       for (let i = 0; i < str.length; i++) {
         hash += Math.pow(str.charCodeAt(i) * 31, str.length - i);
@@ -69,8 +67,6 @@ export default {
 
     getGroupChatId() {
       this.authUser = this.$store.state.user;
-      console.log(this.peerUser);
-      console.log(this.authUser);
       if (
         this.hashString(this.authUser.userId) <= this.hashString(this.peerUser)
       ) {
@@ -79,7 +75,6 @@ export default {
         this.groupChatId = `${this.peerUser}-${this.authUser.userId}`;
       }
       store.dispatch("setChatId", this.groupChatId);
-      console.log(this.groupChatId);
     },
     checkNotifications() {
       this.listenerNotify = db
@@ -98,7 +93,6 @@ export default {
     checkNotificationsGrant() {
       if (Notification.permission !== "denied") {
         Notification.requestPermission().then(function(permission) {
-          console.log("udzielono zgody");
         });
       }
     },
