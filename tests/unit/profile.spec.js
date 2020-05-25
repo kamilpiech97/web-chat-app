@@ -24,7 +24,8 @@ describe('Profile.vue', () => {
     })
 
 
-    const wrapper = shallowMount(Profile, { data() {
+    const wrapper = shallowMount(Profile, {
+        data() {
             return {
                 avatar: 'avatar',
                 nickname: 'Kamil',
@@ -36,11 +37,11 @@ describe('Profile.vue', () => {
     test('wraper h3 text test', () => {
         expect(wrapper.find("h3").text()).toBe("Edycja konta");
     })
-    
+
     test('wraper save button text test', () => {
         expect(wrapper.find(".btn-green").text()).toBe("Zapisz");
     })
-    
+
     test('wraper exit button text test', () => {
         expect(wrapper.find(".btn-danger").text()).toBe("Zamknij");
     })
@@ -48,11 +49,11 @@ describe('Profile.vue', () => {
     test('wraper input nickname test not null', () => {
         expect(wrapper.vm.nickname).toBe('Kamil')
     })
-    
+
     test('wraper input avatar test not null', () => {
         expect(wrapper.vm.avatar).toBe('avatar')
     })
 
-    
+
 
 })

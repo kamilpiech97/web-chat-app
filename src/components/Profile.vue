@@ -7,9 +7,9 @@
         <header class="modal-header">
           <slot name="header">
             <h3 class="text-dark">Edycja konta</h3>
-           <router-link to="/">
+            <router-link to="/">
               <button type="button" class="btn-close">x</button>
-           </router-link>
+            </router-link>
           </slot>
         </header>
         <section class="modal-body">
@@ -25,18 +25,25 @@
             <div class="md-form mb-5 text-left">
               <i class="fas fa-user prefix grey-text"></i>
               <label for="nickname">Nazwa użytkownika</label>
-              <input type="text"  ref="nickname" id="nickname" class="form-control" v-model="nickname" />
+              <input
+                type="text"
+                ref="nickname"
+                id="nickname"
+                class="form-control"
+                v-model="nickname"
+              />
             </div>
             <div class="md-form mb-5 text-left">
               <i class="fas fa-user prefix grey-text"></i>
-              <label for="nickname">Resetuj hasło</label><br>
+              <label for="nickname">Resetuj hasło</label>
+              <br />
               <button type="button" class="btn-primary" @click="resetPassword()">Resetuj</button>
             </div>
           </slot>
         </section>
         <footer class="modal-footer">
           <slot name="footer">
-            <router-link to="/"> 
+            <router-link to="/">
               <button type="button" class="btn-danger">Zamknij</button>
             </router-link>
             <button type="button" class="btn-green" @click="updateUser">Zapisz</button>
@@ -53,7 +60,7 @@ import { mapGetters } from "vuex";
 import store from "../store";
 import storePhoto from "@/mixins/storePhoto";
 import updateProfil from "@/mixins/updateProfil";
-import alert from '../mixins/alert';
+import alert from "../mixins/alert";
 import reset from "../mixins/reset";
 
 export default {
@@ -69,8 +76,8 @@ export default {
   },
   methods: {
     closeAfterUpdate() {
-      this.$router.push('/');
-    },
+      this.$router.push("/");
+    }
   },
   created() {
     this.nickname = this.$store.state.user.nickname;
@@ -148,6 +155,6 @@ export default {
 }
 
 .modal {
-    overflow: auto!important;
+  overflow: auto !important;
 }
 </style>

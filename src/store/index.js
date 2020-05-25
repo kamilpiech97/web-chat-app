@@ -8,10 +8,10 @@ export default new Vuex.Store({
   plugins: [createPersistedState()],
   state: {
     user: {
-      avatar:null,
-      nickname:null,
-      userId:null,
-      email:null
+      avatar: null,
+      nickname: null,
+      userId: null,
+      email: null
     },
     currentPeerUser: null,
     currentPeerUserNickname: null,

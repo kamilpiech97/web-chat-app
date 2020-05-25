@@ -5,8 +5,10 @@ export default {
             this.file = e.target.files[0];
             if (this.file.size > 1024 * 1024) {
                 this.alert('Zdjęcie za duże! - mniejsze niż 1MB', 'error');
-            } else {
+            } else if (this.file.type.toString().indexOf('image/') === 0) {
                 this.storePhoto(e, type);
+            } else {
+                this.alert('To nie jest zdjęcie!', 'error');
             }
             this.file = null;
         },
