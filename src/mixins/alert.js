@@ -4,7 +4,6 @@ export default {
             this.flash(info, type, {
                 timeout: 3000,
             });
-            console.log('done');
         }
     }
 }
