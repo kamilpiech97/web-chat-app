@@ -25,7 +25,7 @@ export default {
   mixins: [notifyMe],
   data() {
     return {
-      authUser : this.$store.state.user,
+      authUser: this.$store.state.user,
       group: {},
       peerUser: {}
     };
@@ -88,12 +88,12 @@ export default {
         .onSnapshot(function(snapshot) {
           let newNotification = [];
           snapshot.docChanges().forEach(function(change) {
-              if (change.type === "modified") {
-                  newNotification.push(change.doc.data());
-                  store.dispatch("setNotification", newNotification[0]);
-              }
+            if (change.type === "modified") {
+              newNotification.push(change.doc.data());
+              store.dispatch("setNotification", newNotification[0]);
+            }
           });
-      });
+        });
     },
     checkNotificationsGrant() {
       if (Notification.permission !== "denied") {
@@ -106,7 +106,7 @@ export default {
       if (this.listenerNotify) {
         this.listenerNotify();
       }
-    },
+    }
   },
   created() {
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
@@ -128,8 +128,6 @@ export default {
       if (mutation.type === "logoutUser") {
         this.unmountNotifications();
       }
-
-
     });
     this.checkNotificationsGrant();
     this.checkNotifications();

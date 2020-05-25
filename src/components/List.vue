@@ -40,9 +40,7 @@
               <img v-bind:src="user.avatar" alt="user" width="50" class="rounded-circle user-img" />
               <div class="media-body ml-4">
                 <div class="d-flex align-items-center justify-content-between mb-1">
-                  <h6
-                    class="mb-0"
-                  >{{user.nickname}}</h6>
+                  <h6 class="mb-0">{{user.nickname}}</h6>
                 </div>
               </div>
             </div>
@@ -80,10 +78,10 @@ import Modal from "@/components/Profile.vue";
 
 export default {
   name: "SingleChat",
-  data () {
+  data() {
     return {
       users: [],
-      groups: ["mems", "star wars"],
+      groups: ["mems", "starwars"],
       isModalVisible: false,
       search: "",
       notification: {}
@@ -163,7 +161,7 @@ export default {
   padding-left: 10px;
   height: 75px;
 }
-.mini-dashboard{
+.mini-dashboard {
   overflow: scroll;
 }
 </style>
